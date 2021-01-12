@@ -11,8 +11,7 @@ public class ServiceFactoryImpl implements ServiceAbstractFactory{
 
 	@Override
 	public CustomerRegistryService getCustomerRegistryService() {
-		// TODO Auto-generated method stub
-		return null;
+		return new CustomerRegistryServiceImpl(daoFactory);
 	}
 	
 }
