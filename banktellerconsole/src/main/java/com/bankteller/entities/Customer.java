@@ -1,13 +1,14 @@
 package com.bankteller.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Customer {
 	private int customerId;
 	private String firstName;
 	private String lastName;
 	private LocalDate dateOfBirth;
-	private LocalDate dateOfRegistration;
+	private LocalDateTime dateOfRegistration;
 	private String address;
 	
 	public Customer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String address) {
@@ -49,11 +50,11 @@ public class Customer {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public LocalDate getDateOfRegistration() {
+	public LocalDateTime getDateOfRegistration() {
 		return dateOfRegistration;
 	}
 
-	public void setDateOfRegistration(final LocalDate dateOfRegistration) {
+	public void setDateOfRegistration(final LocalDateTime dateOfRegistration) {
 		this.dateOfRegistration = dateOfRegistration;
 	}
 
