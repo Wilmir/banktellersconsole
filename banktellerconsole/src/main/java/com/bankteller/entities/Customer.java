@@ -4,35 +4,43 @@ import java.time.LocalDate;
 
 public class Customer {
 	private int customerId;
-	private String name;
+	private String firstName;
+	private String lastName;
 	private LocalDate dateOfBirth;
 	private LocalDate dateOfRegistration;
 	private String address;
 	
+	public Customer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String address) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.address = address;
+	}
+
 	public int getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(final int customerId) {
 		this.customerId = customerId;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
-	
-	public void setName(final String name) {
-		this.name = name;
+
+	public void setFirstName(final String firstName) {
+		this.firstName = firstName;
 	}
-	
-	public String getAddress() {
-		return address;
+
+	public String getLastName() {
+		return lastName;
 	}
-	
-	public void setAddress(final String address) {
-		this.address = address;
+
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
 	}
-	
+
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
@@ -49,9 +57,18 @@ public class Customer {
 		this.dateOfRegistration = dateOfRegistration;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(final String address) {
+		this.address = address;
+	}
+
 	@Override
 	public String toString() {
-		return "Customer [id=" + customerId + ", name=" + name + ", address=" + address + "]";
+		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", dateOfBirth=" + dateOfBirth + ", dateOfRegistration=" + dateOfRegistration + ", address=" + address
+				+ "]";
 	}
-	
 }
