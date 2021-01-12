@@ -1,21 +1,32 @@
 package com.bankteller.services;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 import com.bankteller.dao.CustomerDAO;
 import com.bankteller.dao.DAOAbstractFactory;
 import com.bankteller.entities.Customer;
+import com.bankteller.exceptions.DataAccessException;
 
 
 public class CustomerRegistryServiceImpl implements CustomerRegistryService{
 	private final CustomerDAO customerDAO;
 
-	CustomerRegistryServiceImpl(final DAOAbstractFactory daoFactory) {
+	public CustomerRegistryServiceImpl(final DAOAbstractFactory daoFactory) {
 		this.customerDAO = daoFactory.getCustomerDAO();
 	}
-
+	
 	@Override
-	public void add(final Customer customer) {
-		// TODO Auto-generated method stub
+	public void add(final String firstName, final String lastName, final LocalDate dateOfBirth, final String address)
+			throws DataAccessException {
+
+		final Customer customer = new Customer(firstName, lastName, dateOfBirth, address);
 		
+		try {
+			customerDAO.add(customer);
+		} catch (SQLException e) {
+			throw new DataAccessException("The database failed to add the customer.");
+		}
 	}
 
 	@Override
@@ -29,6 +40,8 @@ public class CustomerRegistryServiceImpl implements CustomerRegistryService{
 		// TODO Auto-generated method stub
 		
 	}
+
+
 
 	
 	
