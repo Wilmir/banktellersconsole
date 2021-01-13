@@ -1,7 +1,6 @@
 package com.bankteller.services;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.bankteller.entities.Customer;
 import com.bankteller.exceptions.CustomerAlreadyExistsException;
@@ -12,5 +11,4 @@ public interface CustomerRegistryService {
 	
 	Customer getCustomer(final String name) throws DataAccessException;
 
-	void update(final Customer customer) throws DataAccessException;
 }

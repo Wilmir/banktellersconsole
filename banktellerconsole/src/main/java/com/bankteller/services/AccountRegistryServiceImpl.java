@@ -29,10 +29,10 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 	
 	@Override
 	public Account add(final String ppsNumber, final String accountType) throws DataAccessException, CustomerDoesNotExistException{
-		Account account = accountFactory.getAccount(accountType);			
+		final Account account = accountFactory.getAccount(accountType);			
 		
 		try {
-			Customer customer = customerDAO.getCustomerByPPSNumber(ppsNumber);
+			final Customer customer = customerDAO.getCustomerByPPSNumber(ppsNumber);
 
 			if(customer == null) {
 				throw new CustomerDoesNotExistException("The customer does not exist");
@@ -47,10 +47,10 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 
 
 	@Override
-	public Account getAccount(int accountNumber) throws DataAccessException, AccountNotFoundException {
+	public Account getAccount(final int accountNumber) throws DataAccessException, AccountNotFoundException {
 		try {
 		
-			Account account = accountDAO.getAccount(accountNumber);
+			final Account account = accountDAO.getAccount(accountNumber);
 		
 			if(account == null) {
 				throw new AccountNotFoundException("No account with account number " +  accountNumber + " found.");
@@ -65,7 +65,7 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 
 
 	@Override
-	public void update(Account account) throws DataAccessException {
+	public void update(final Account account) throws DataAccessException {
 		try {
 			accountDAO.updateBalance(account);
 		} catch (SQLException e) {

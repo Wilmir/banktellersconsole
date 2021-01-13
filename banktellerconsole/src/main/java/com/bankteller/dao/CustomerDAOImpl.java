@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bankteller.entities.Account;
 import com.bankteller.entities.Customer;
 
 
@@ -29,28 +28,28 @@ public class CustomerDAOImpl implements CustomerDAO{
 	@Override
 	public Customer add(final Customer customer) throws SQLException{
 		final PreparedStatement preparedStatement = prepareStatement(ADD_CUSTOMER_QUERY);
-		preparedStatement.setString(1, customer.getFirstName());
-		preparedStatement.setString(2, customer.getLastName());
-		preparedStatement.setObject(3, customer.getDateOfBirth());
-		preparedStatement.setString(4, customer.getPpsNumber());
-		preparedStatement.setString(5, customer.getAddress());
-		preparedStatement.executeUpdate();
-		
-		Customer newCustomer = null;
-		
-		final ResultSet resultSet = preparedStatement.getGeneratedKeys();	
-		
-		if(resultSet.next()) {
-			int customerID = resultSet.getInt(1);
-
-			newCustomer = getCustomerByID(customerID);
-		
+		ResultSet resultSet = null;
+		try {
+			preparedStatement.setString(1, customer.getFirstName());
+			preparedStatement.setString(2, customer.getLastName());
+			preparedStatement.setObject(3, customer.getDateOfBirth());
+			preparedStatement.setString(4, customer.getPpsNumber());
+			preparedStatement.setString(5, customer.getAddress());
+			preparedStatement.executeUpdate();
+			
+			
+			Customer newCustomer = null;
+			resultSet = preparedStatement.getGeneratedKeys();	
+			if(resultSet.next()) {
+				final int customerID = resultSet.getInt(1);
+				newCustomer = getCustomerByID(customerID);
+			}
+			return newCustomer;
+			
+		}finally {
+			resultSet.close();
+			preparedStatement.close();
 		}
-		
-		resultSet.close();
-		preparedStatement.close();		
-		
-		return newCustomer;
 	}
 	
 	
@@ -72,20 +71,26 @@ public class CustomerDAOImpl implements CustomerDAO{
 		final ResultSet resultSet = preparedStatement.executeQuery(GET_CUSTOMERS_QUERY);
 		final List<Customer> accountList = new ArrayList<>();
 		
-		while(resultSet.next()) {
-			accountList.add(extractCustomer(resultSet));
+		try {
+			while(resultSet.next()) {
+				accountList.add(extractCustomer(resultSet));
+			}
+			return accountList;
+		}finally {
+			resultSet.close();
+			preparedStatement.close();
 		}
-		resultSet.close();
-		preparedStatement.close();
-		return accountList;
 	}
 
 	
 	@Override
 	public void deleteAll() throws SQLException {
 		final Statement preparedStatement = createStatement();
-		preparedStatement.executeUpdate(DELETE_ALL_QUERY);
-		preparedStatement.close();		
+		try {
+			preparedStatement.executeUpdate(DELETE_ALL_QUERY);
+		}finally {
+			preparedStatement.close();
+		}
 	}
 
 
@@ -99,13 +104,16 @@ public class CustomerDAOImpl implements CustomerDAO{
 	private Customer getCustomerQuery(final String query) throws SQLException {
 		final Statement preparedStatement = createStatement();
 		final ResultSet resultSet = preparedStatement.executeQuery(query);	
-		Customer customer = null;
-		if(resultSet.next()) {
-			customer = extractCustomer(resultSet);
+		try {
+			Customer customer = null;
+			if(resultSet.next()) {
+				customer = extractCustomer(resultSet);
+			}
+			return customer;
+		}finally {
+			resultSet.close();
+			preparedStatement.close();
 		}
-		resultSet.close();
-		preparedStatement.close();
-		return customer;
 	}
 	
 	

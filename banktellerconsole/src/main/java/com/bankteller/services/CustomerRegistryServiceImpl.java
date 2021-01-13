@@ -42,11 +42,6 @@ public class CustomerRegistryServiceImpl implements CustomerRegistryService{
 		return null;
 	}
 
-	@Override
-	public void update(final Customer customer) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 

@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 
 public class Customer {
 	private int customerId;
-	private String firstName;
-	private String lastName;
-	private LocalDate dateOfBirth;
+	private final String firstName;
+	private final String lastName;
+	private final LocalDate dateOfBirth;
 	private LocalDateTime dateOfRegistration;
-	private String ppsNumber;
-	private String address;
+	private final String ppsNumber;
+	private final String address;
 	
 	public Customer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) {
 		this.firstName = firstName;
@@ -32,28 +32,12 @@ public class Customer {
 		return firstName;
 	}
 
-	public void setFirstName(final String firstName) {
-		this.firstName = firstName;
-	}
-
 	public String getLastName() {
 		return lastName;
 	}
 
-	public void setLastName(final String lastName) {
-		this.lastName = lastName;
-	}
-
 	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(final LocalDate dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
-	public LocalDateTime getDateOfRegistration() {
-		return dateOfRegistration;
 	}
 
 	public void setDateOfRegistration(final LocalDateTime dateOfRegistration) {
@@ -64,16 +48,8 @@ public class Customer {
 		return ppsNumber;
 	}
 
-	public void setPpsNumber(final String ppsNumber) {
-		this.ppsNumber = ppsNumber;
-	}
-
 	public String getAddress() {
 		return address;
-	}
-
-	public void setAddress(final String address) {
-		this.address = address;
 	}
 
 	@Override

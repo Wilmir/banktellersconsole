@@ -10,6 +10,8 @@ import com.bankteller.dao.AccountDAOImpl;
 import com.bankteller.dao.CustomerDAOImpl;
 import com.bankteller.dao.DAOFactoryImpl;
 import com.bankteller.dao.Database;
+import com.bankteller.dao.TransactionDAOImpl;
+import com.bankteller.entities.TransactionType;
 
 class DAOFactoryImplTest {
 	private final Database database = mock(Database.class);
@@ -28,6 +30,11 @@ class DAOFactoryImplTest {
 	@Test
 	void testGetAccountDAO() {
 		assertTrue(daoFactory.getAccountDAO() instanceof AccountDAOImpl);
+	}
+	
+	@Test
+	void testGetTransactionDAO() {
+		assertTrue(daoFactory.getTransactionDAO() instanceof TransactionDAOImpl);
 	}
 
 }

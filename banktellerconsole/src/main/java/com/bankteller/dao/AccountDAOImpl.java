@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bankteller.entities.Account;
-import com.bankteller.entities.AccountType;
 import com.bankteller.entities.CurrentAccount;
 import com.bankteller.entities.Customer;
 import com.bankteller.entities.SavingsAccount;
@@ -31,28 +30,31 @@ public class AccountDAOImpl implements AccountDAO{
 
 	
 	@Override
-	public Account add(final Customer customer, Account account) throws SQLException {
+	public Account add(final Customer customer, final Account account) throws SQLException {
 		final PreparedStatement preparedStatement = prepareStatement(ADD_ACCOUNT_QUERY);
-		preparedStatement.setInt(1,account.getTypeId());
-		preparedStatement.setInt(2,customer.getCustomerId());
-		preparedStatement.executeUpdate();
-		
-		
-		Account newAccount = null;
-		
-		final ResultSet resultSet = preparedStatement.getGeneratedKeys();	
-		
-		if(resultSet.next()) {
-			int accountNumber = resultSet.getInt(1);
+		try {
+			preparedStatement.setInt(1,account.getTypeId());
+			preparedStatement.setInt(2,customer.getCustomerId());
+			preparedStatement.executeUpdate();
+			
+			Account newAccount = null;
+			
+			final ResultSet resultSet = preparedStatement.getGeneratedKeys();	
+			
+			try {
+				if(resultSet.next()) {
+					final int accountNumber = resultSet.getInt(1);
 
-			newAccount = getAccount(accountNumber);
-		
+					newAccount = getAccount(accountNumber);
+				}
+			}finally {
+				resultSet.close();
+			}
+
+			return newAccount;
+		}finally {
+			preparedStatement.close();
 		}
-		
-		resultSet.close();
-		preparedStatement.close();		
-		
-		return newAccount;
 	}
 	
 
@@ -60,13 +62,17 @@ public class AccountDAOImpl implements AccountDAO{
 	public List<Account> getAccounts(final Customer customer) throws SQLException {		
 		final Statement preparedStatement = createStatement();
 		final ResultSet resultSet = preparedStatement.executeQuery(GET_CUSTOMER_ACCOUNTS_QUERY + customer.getCustomerId());
-		final List<Account> accountList = new ArrayList<>();
-		while(resultSet.next()) {
-			accountList.add(extractAccount(resultSet));
+		try {
+			final List<Account> accountList = new ArrayList<>();
+			while(resultSet.next()) {
+				accountList.add(extractAccount(resultSet));
+			}
+			return accountList;
+		} finally {
+			resultSet.close();
+			preparedStatement.close();
+			
 		}
-		resultSet.close();
-		preparedStatement.close();
-		return accountList;
 	}
 
 	
@@ -74,31 +80,42 @@ public class AccountDAOImpl implements AccountDAO{
 	public Account getAccount(final int accountNumber) throws SQLException {		
 		final Statement statement = createStatement();
 		final ResultSet resultSet = statement.executeQuery(GET_A_SINGLE_ACCOUNT_QUERY + accountNumber);	
-		Account account = null;
-		if(resultSet.next()) {
-			account = extractAccount(resultSet);
+		try {
+			Account account = null;
+			if(resultSet.next()) {
+				account = extractAccount(resultSet);
+			}
+			
+			return account;
+
+		} finally {
+			resultSet.close();
+			statement.close();	
 		}
-		resultSet.close();
-		statement.close();
-		return account;
 	}
 	
 	
 	@Override
-	public void updateBalance(Account account) throws SQLException {
+	public void updateBalance(final Account account) throws SQLException {
 		final PreparedStatement preparedStatement = prepareStatement(UPDATE_ACCOUNT_BALANCE_QUERY);
-		preparedStatement.setDouble(1, account.getBalance());
-		preparedStatement.setInt(2, account.getAccountNumber());
-		preparedStatement.executeUpdate();
-		preparedStatement.close();		
+		try {
+			preparedStatement.setDouble(1, account.getBalance());
+			preparedStatement.setInt(2, account.getAccountNumber());
+			preparedStatement.executeUpdate();
+		}finally {
+			preparedStatement.close();		
+		}
 	}
 	
 	
 	@Override
 	public void deleteAll() throws SQLException {
 		final Statement statement = createStatement();
-		statement.executeUpdate(DELETE_ALL_QUERY);
-		statement.close();
+		try {
+			statement.executeUpdate(DELETE_ALL_QUERY);
+		}finally {
+			statement.close();
+		}
 	}
 	
 	

@@ -9,7 +9,6 @@ public class DAOFactoryImpl implements DAOAbstractFactory{
 
 	@Override
 	public CustomerDAO getCustomerDAO() {
-		// TODO Auto-generated method stub
 		return new CustomerDAOImpl(database);
 	}
 
@@ -20,7 +19,7 @@ public class DAOFactoryImpl implements DAOAbstractFactory{
 
 	@Override
 	public TransactionDAO getTransactionDAO() {
-		return null;
+		return new TransactionDAOImpl(database);
 	}
 		
 
