@@ -12,6 +12,12 @@ public class DAOFactoryImpl implements DAOAbstractFactory{
 		// TODO Auto-generated method stub
 		return new CustomerDAOImpl(database);
 	}
+
+	@Override
+	public AccountDAO getAccountDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 		
 
 }

@@ -1,6 +1,7 @@
 package com.bankteller.services;
 
 import com.bankteller.dao.DAOAbstractFactory;
+import com.bankteller.entities.AccountFactory;
 
 public class ServiceFactoryImpl implements ServiceAbstractFactory{
 	private final DAOAbstractFactory daoFactory;
@@ -12,6 +13,12 @@ public class ServiceFactoryImpl implements ServiceAbstractFactory{
 	@Override
 	public CustomerRegistryService getCustomerRegistryService() {
 		return new CustomerRegistryServiceImpl(daoFactory);
+	}
+
+	@Override
+	public AccountRegistryService getAccountRegistryService() {
+		// TODO Auto-generated method stub
+		return new AccountRegistryServiceImpl(daoFactory, new AccountFactory());
 	}
 	
 }
