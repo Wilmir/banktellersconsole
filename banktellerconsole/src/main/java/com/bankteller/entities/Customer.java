@@ -9,12 +9,14 @@ public class Customer {
 	private String lastName;
 	private LocalDate dateOfBirth;
 	private LocalDateTime dateOfRegistration;
+	private String ppsNumber;
 	private String address;
 	
-	public Customer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String address) {
+	public Customer(String firstName, String lastName, LocalDate dateOfBirth, String ppsNumber, String address) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
+		this.ppsNumber = ppsNumber;
 		this.address = address;
 	}
 
@@ -22,7 +24,7 @@ public class Customer {
 		return customerId;
 	}
 
-	public void setCustomerId(final int customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 
@@ -30,7 +32,7 @@ public class Customer {
 		return firstName;
 	}
 
-	public void setFirstName(final String firstName) {
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -38,7 +40,7 @@ public class Customer {
 		return lastName;
 	}
 
-	public void setLastName(final String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -46,7 +48,7 @@ public class Customer {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(final LocalDate dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
@@ -54,22 +56,30 @@ public class Customer {
 		return dateOfRegistration;
 	}
 
-	public void setDateOfRegistration(final LocalDateTime dateOfRegistration) {
+	public void setDateOfRegistration(LocalDateTime dateOfRegistration) {
 		this.dateOfRegistration = dateOfRegistration;
+	}
+
+	public String getPpsNumber() {
+		return ppsNumber;
+	}
+
+	public void setPpsNumber(String ppsNumber) {
+		this.ppsNumber = ppsNumber;
 	}
 
 	public String getAddress() {
 		return address;
 	}
 
-	public void setAddress(final String address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 
 	@Override
 	public String toString() {
 		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", dateOfBirth=" + dateOfBirth + ", dateOfRegistration=" + dateOfRegistration + ", address=" + address
-				+ "]";
+				+ ", dateOfBirth=" + dateOfBirth + ", dateOfRegistration=" + dateOfRegistration + ", ppsNumber="
+				+ ppsNumber + ", address=" + address + "]";
 	}
 }

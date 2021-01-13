@@ -10,6 +10,8 @@ public interface CustomerDAO {
 
 	List<Customer> getCustomers() throws SQLException;
 	
+	Customer getCustomerByPPSNumber(String ppsNumber) throws SQLException;
+	
 	Customer getCustomerByName(String name) throws SQLException;
 
 	void update(final Customer customer) throws SQLException;

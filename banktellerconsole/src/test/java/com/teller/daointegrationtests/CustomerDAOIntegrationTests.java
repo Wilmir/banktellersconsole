@@ -23,6 +23,7 @@ public class CustomerDAOIntegrationTests {
 	private final static Database database = new MySQLDatabaseImpl();
 	private static final String FIRST_NAME = "Wilmir";
 	private static final String LAST_NAME = "Nicanor";
+	private static final String PPS_NUMBER = "1234567";
 	private static final String ADDRESS = "Dublin, Ireland";
 	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
 	
@@ -43,7 +44,7 @@ public class CustomerDAOIntegrationTests {
 
 	@Test
 	void testEmptyCustomer() throws SQLException{
-		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, ADDRESS);
+		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 		
 		assertEquals(0, customerDAO.getCustomers().size());
 
@@ -52,7 +53,7 @@ public class CustomerDAOIntegrationTests {
 	
 	@Test
 	void testAddOneCustomer() throws SQLException{
-		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, ADDRESS);
+		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 
 		customerDAO.add(customer);
 		
@@ -60,16 +61,31 @@ public class CustomerDAOIntegrationTests {
 
 	}
 	
-	
 	@Test
 	void testAddTwoCustomers() throws SQLException{
-		final Customer customer1 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, ADDRESS);
-		final Customer customer2 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, ADDRESS);
+		final Customer customer1 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+		final Customer customer2 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 
 		customerDAO.add(customer1);
 		customerDAO.add(customer2);
 
 		assertEquals(2, customerDAO.getCustomers().size());		
+	}
+	
+	@Test
+	void testGetCustomerByPPSNumber() throws SQLException{
+		final Customer customer1 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+
+		customerDAO.add(customer1);
+		assertEquals(1, customerDAO.getCustomers().size());		
+
+		final Customer customer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
+		assertEquals(FIRST_NAME, customer.getFirstName());
+		assertEquals(LAST_NAME, customer.getLastName());
+		assertEquals(DATE_OF_BIRTH, customer.getDateOfBirth());
+		assertEquals(PPS_NUMBER, customer.getPpsNumber());
+		assertEquals(ADDRESS, customer.getAddress());
+
 	}
 	
 	
