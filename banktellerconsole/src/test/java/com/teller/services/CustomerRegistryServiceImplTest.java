@@ -49,7 +49,7 @@ class CustomerRegistryServiceImplTest {
 		
 		when(customerDAO.getCustomerByPPSNumber(PPS_NUMBER)).thenReturn(customer);
 		
-		Throwable exception = assertThrows(CustomerAlreadyExistsException.class, () -> customerRegistryService.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
+		final Throwable exception = assertThrows(CustomerAlreadyExistsException.class, () -> customerRegistryService.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
 
 		assertEquals("Customer already exists", exception.getMessage());
 	
@@ -61,7 +61,7 @@ class CustomerRegistryServiceImplTest {
 	void testUnSuccesfulCustomerCreationDueToSQLError() throws DataAccessException, SQLException {	
 		doThrow(SQLException.class).when(customerDAO).add(anyObject());
 		
-		Throwable exception = assertThrows(DataAccessException.class, () -> customerRegistryService.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
+		final Throwable exception = assertThrows(DataAccessException.class, () -> customerRegistryService.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
 	
 		assertEquals("The database failed to add the customer.", exception.getMessage());
 	}

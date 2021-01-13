@@ -52,39 +52,39 @@ public class CustomerDAOImpl implements CustomerDAO{
 
 	@Override
 	public List<Customer> getCustomers() throws SQLException {
-		final Statement stmt = createStatement();
-		final ResultSet resultSet = stmt.executeQuery(GET_CUSTOMERS_QUERY);
+		final Statement preparedStatement = createStatement();
+		final ResultSet resultSet = preparedStatement.executeQuery(GET_CUSTOMERS_QUERY);
 		final List<Customer> accountList = new ArrayList<>();
 		
 		while(resultSet.next()) {
 			accountList.add(extractCustomer(resultSet));
 		}
 		resultSet.close();
-		stmt.close();
+		preparedStatement.close();
 		return accountList;
 	}
 
 	@Override
 	public void deleteAll() throws SQLException {
-		final Statement stmt = createStatement();
-		stmt.executeUpdate(DELETE_ALL_QUERY);
-		stmt.close();		
+		final Statement preparedStatement = createStatement();
+		preparedStatement.executeUpdate(DELETE_ALL_QUERY);
+		preparedStatement.close();		
 	}
 	
 	@Override
-	public Customer getCustomerByName(String name) throws SQLException {
+	public Customer getCustomerByName(final String name) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void update(Customer customer) throws SQLException {
+	public void update(final Customer customer) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	
-	private Customer extractCustomer(ResultSet resultSet) throws SQLException {
+	private Customer extractCustomer(final ResultSet resultSet) throws SQLException {
 		final int customerID = resultSet.getInt("id");
 		final String firstName = resultSet.getString("firstName");
 		final String lastName = resultSet.getString("lastName");

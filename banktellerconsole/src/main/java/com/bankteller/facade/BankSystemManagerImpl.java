@@ -12,7 +12,7 @@ import com.bankteller.services.ServiceAbstractFactory;
 public class BankSystemManagerImpl implements BankSystemManager{
 	private final CustomerRegistryService customerRegistryService;
 	
-	public BankSystemManagerImpl(ServiceAbstractFactory serviceFactory) {
+	public BankSystemManagerImpl(final ServiceAbstractFactory serviceFactory) {
 		customerRegistryService = serviceFactory.getCustomerRegistryService();
 
 	}

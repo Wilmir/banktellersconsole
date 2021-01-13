@@ -43,7 +43,7 @@ class BankSystemManagerImplTest {
 		
 		doThrow(DataAccessException.class).when(customerRegistryService).add(anyString(), anyString(), anyObject(), anyString(), anyString());
 	
-		final Throwable exception = assertThrows(DataAccessException.class, () -> bankSystemManager.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
+		assertThrows(DataAccessException.class, () -> bankSystemManager.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
 		
 		verify(customerRegistryService, times(1)).add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 	}
@@ -53,7 +53,7 @@ class BankSystemManagerImplTest {
 		
 		doThrow(CustomerAlreadyExistsException.class).when(customerRegistryService).add(anyString(), anyString(), anyObject(), anyString(), anyString());
 	
-		final Throwable exception = assertThrows(CustomerAlreadyExistsException.class, () -> bankSystemManager.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
+		assertThrows(CustomerAlreadyExistsException.class, () -> bankSystemManager.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
 		
 		verify(customerRegistryService, times(1)).add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 	}

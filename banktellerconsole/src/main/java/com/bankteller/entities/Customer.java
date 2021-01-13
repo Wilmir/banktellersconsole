@@ -12,7 +12,7 @@ public class Customer {
 	private String ppsNumber;
 	private String address;
 	
-	public Customer(String firstName, String lastName, LocalDate dateOfBirth, String ppsNumber, String address) {
+	public Customer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
@@ -24,7 +24,7 @@ public class Customer {
 		return customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(final int customerId) {
 		this.customerId = customerId;
 	}
 
@@ -32,7 +32,7 @@ public class Customer {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(final String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -40,7 +40,7 @@ public class Customer {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(final String lastName) {
 		this.lastName = lastName;
 	}
 
@@ -48,7 +48,7 @@ public class Customer {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(LocalDate dateOfBirth) {
+	public void setDateOfBirth(final LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
@@ -56,7 +56,7 @@ public class Customer {
 		return dateOfRegistration;
 	}
 
-	public void setDateOfRegistration(LocalDateTime dateOfRegistration) {
+	public void setDateOfRegistration(final LocalDateTime dateOfRegistration) {
 		this.dateOfRegistration = dateOfRegistration;
 	}
 
@@ -64,7 +64,7 @@ public class Customer {
 		return ppsNumber;
 	}
 
-	public void setPpsNumber(String ppsNumber) {
+	public void setPpsNumber(final String ppsNumber) {
 		this.ppsNumber = ppsNumber;
 	}
 
@@ -72,7 +72,7 @@ public class Customer {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(final String address) {
 		this.address = address;
 	}
 

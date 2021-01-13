@@ -11,7 +11,7 @@ import com.bankteller.dao.DAOFactoryImpl;
 import com.bankteller.dao.Database;
 
 class DAOFactoryImplTest {
-	private Database database = mock(Database.class);
+	private final Database database = mock(Database.class);
 	private DAOFactoryImpl daoFactory;
 	
 	@BeforeEach

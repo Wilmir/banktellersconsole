@@ -43,9 +43,7 @@ public class CustomerDAOIntegrationTests {
 	
 
 	@Test
-	void testEmptyCustomer() throws SQLException{
-		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-		
+	void testEmptyCustomer() throws SQLException{		
 		assertEquals(0, customerDAO.getCustomers().size());
 
 	}
