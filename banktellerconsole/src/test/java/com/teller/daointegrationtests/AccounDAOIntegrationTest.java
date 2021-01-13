@@ -29,6 +29,7 @@ import com.bankteller.entities.Customer;
 
 
 class AccounDAOIntegrationTest {
+	private static final double DEPOSIT_AMOUNT = 3001.14;
 	private static final String SAVINGS_ACCOUNT_INPUT = "savings";
 	private static final String CURRENT_ACCOUNT_INPUT = "current";
 	private static final double ZERO_BALANCE = 0.00;
@@ -102,6 +103,28 @@ class AccounDAOIntegrationTest {
 		assertEquals(ZERO_BALANCE, retrievedAccount2.getBalance());
 	}
 	
+	@Test
+	void testUpdateAccountBalance() throws SQLException{
+		final Account account = accountFactory.getAccount(CURRENT_ACCOUNT_INPUT);
+
+		customerDAO.deleteAll();
+		customerDAO.add(NEW_CUSTOMER);
+		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
+		
+		accountDAO.deleteAll();
+		final Account retrievedAccount = accountDAO.add(retrievedCustomer, account);
+		assertEquals(ZERO_BALANCE, retrievedAccount.getBalance());
+
+		
+		retrievedAccount.setBalance(DEPOSIT_AMOUNT);		
+		accountDAO.updateBalance(retrievedAccount);
+		
+		final Account updatedAccount = accountDAO.getAccount(retrievedAccount.getAccountNumber());		
+		assertEquals(DEPOSIT_AMOUNT, updatedAccount.getBalance());
+
+	}
+	
+
 	
 	@AfterAll
 	static void disconnectToDB() throws SQLException {

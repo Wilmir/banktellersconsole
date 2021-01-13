@@ -22,12 +22,14 @@ public class AccountDAOImpl implements AccountDAO{
 			GET_CUSTOMER_ACCOUNTS_QUERY = "SELECT * FROM accounts WHERE customerID = ",
 			GET_A_SINGLE_ACCOUNT_QUERY = "SELECT * FROM accounts WHERE id = ",
 			GET_ACCOUNT_TRANSACTIONS_QUERY = "SELECT * FROM transactions WHERE accountID = ",
+			UPDATE_ACCOUNT_BALANCE_QUERY = "UPDATE accounts SET balance = ? WHERE id = ?",
 			DELETE_ALL_QUERY = "DELETE FROM accounts";
 
 	public AccountDAOImpl(final Database database) {
 		this.database = database;
 	}
 
+	
 	@Override
 	public Account add(final Customer customer, Account account) throws SQLException {
 		final PreparedStatement preparedStatement = prepareStatement(ADD_ACCOUNT_QUERY);
@@ -81,6 +83,17 @@ public class AccountDAOImpl implements AccountDAO{
 		return account;
 	}
 	
+	
+	@Override
+	public void updateBalance(Account account) throws SQLException {
+		final PreparedStatement preparedStatement = prepareStatement(UPDATE_ACCOUNT_BALANCE_QUERY);
+		preparedStatement.setDouble(1, account.getBalance());
+		preparedStatement.setInt(2, account.getAccountNumber());
+		preparedStatement.executeUpdate();
+		preparedStatement.close();		
+	}
+	
+	
 	@Override
 	public void deleteAll() throws SQLException {
 		final Statement statement = createStatement();
@@ -114,7 +127,5 @@ public class AccountDAOImpl implements AccountDAO{
 	
 		return account;
 	}
-
-
 	
 }
