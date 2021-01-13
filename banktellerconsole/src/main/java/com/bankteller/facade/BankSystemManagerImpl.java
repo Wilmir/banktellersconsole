@@ -2,6 +2,8 @@ package com.bankteller.facade;
 
 import java.time.LocalDate;
 
+import com.bankteller.entities.Account;
+import com.bankteller.entities.Customer;
 import com.bankteller.exceptions.CustomerAlreadyExistsException;
 import com.bankteller.exceptions.CustomerDoesNotExistException;
 import com.bankteller.exceptions.DataAccessException;
@@ -23,14 +25,14 @@ public class BankSystemManagerImpl implements BankSystemManager{
 	}
 
 	@Override
-	public void addCustomer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) throws DataAccessException, CustomerAlreadyExistsException {
-		customerRegistryService.add(firstName, lastName, dateOfBirth, ppsNumber, address);
+	public Customer addCustomer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) throws DataAccessException, CustomerAlreadyExistsException {
+		return customerRegistryService.add(firstName, lastName, dateOfBirth, ppsNumber, address);
 	}
 
 	@Override
-	public void addAccount(final String ppsNumber, final String accountType)
+	public Account addAccount(final String ppsNumber, final String accountType)
 			throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException {
-		accountRegistryService.add(ppsNumber, accountType);
+		return accountRegistryService.add(ppsNumber, accountType);
 	}
 
 }

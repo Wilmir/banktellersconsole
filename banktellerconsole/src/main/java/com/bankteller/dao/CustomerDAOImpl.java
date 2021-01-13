@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bankteller.entities.Account;
 import com.bankteller.entities.Customer;
-
 
 
 public class CustomerDAOImpl implements CustomerDAO{
@@ -18,6 +18,7 @@ public class CustomerDAOImpl implements CustomerDAO{
 	private static final String ADD_CUSTOMER_QUERY = "INSERT INTO customers (firstName, lastName, dateOfBirth, ppsNumber, address) VALUES (?, ?, ?, ?, ?)",
 			GET_CUSTOMERS_QUERY = "SELECT * FROM customers",
 			GET_A_SINGLE_CUSTOMER_BY_PPSNUMBER = "SELECT * FROM customers WHERE ppsNumber = ",
+			GET_A_SINGLE_CUSTOMER_BY_ID = "SELECT * FROM customers WHERE id = ",
 			GET_A_SINGLE_CUSTOMER_BY_NAMEQUERY = "SELECT * FROM customers WHERE firstName = (?) AND lastName = (?)",
 			DELETE_ALL_QUERY = "DELETE FROM customers";
 	
@@ -26,7 +27,7 @@ public class CustomerDAOImpl implements CustomerDAO{
 	}
 	
 	@Override
-	public void add(final Customer customer) throws SQLException{
+	public Customer add(final Customer customer) throws SQLException{
 		final PreparedStatement preparedStatement = prepareStatement(ADD_CUSTOMER_QUERY);
 		preparedStatement.setString(1, customer.getFirstName());
 		preparedStatement.setString(2, customer.getLastName());
@@ -34,22 +35,37 @@ public class CustomerDAOImpl implements CustomerDAO{
 		preparedStatement.setString(4, customer.getPpsNumber());
 		preparedStatement.setString(5, customer.getAddress());
 		preparedStatement.executeUpdate();
-		preparedStatement.close();
+		
+		Customer newCustomer = null;
+		
+		final ResultSet resultSet = preparedStatement.getGeneratedKeys();	
+		
+		if(resultSet.next()) {
+			int customerID = resultSet.getInt(1);
+
+			newCustomer = getCustomerByID(customerID);
+		
+		}
+		
+		resultSet.close();
+		preparedStatement.close();		
+		
+		return newCustomer;
 	}
+	
 	
 	@Override
 	public Customer getCustomerByPPSNumber(final String ppsNumber) throws SQLException {
-		final Statement preparedStatement = createStatement();
-		final ResultSet resultSet = preparedStatement.executeQuery(GET_A_SINGLE_CUSTOMER_BY_PPSNUMBER + ppsNumber.trim());	
-		Customer customer = null;
-		if(resultSet.next()) {
-			customer = extractCustomer(resultSet);
-		}
-		resultSet.close();
-		preparedStatement.close();
-		return customer;
+		return getCustomerQuery(GET_A_SINGLE_CUSTOMER_BY_PPSNUMBER + ppsNumber.trim());
 	}
 
+	
+	@Override
+	public Customer getCustomerByID(final int customerID) throws SQLException {
+		return getCustomerQuery(GET_A_SINGLE_CUSTOMER_BY_ID + customerID);
+	}
+	
+	
 	@Override
 	public List<Customer> getCustomers() throws SQLException {
 		final Statement preparedStatement = createStatement();
@@ -64,18 +80,14 @@ public class CustomerDAOImpl implements CustomerDAO{
 		return accountList;
 	}
 
+	
 	@Override
 	public void deleteAll() throws SQLException {
 		final Statement preparedStatement = createStatement();
 		preparedStatement.executeUpdate(DELETE_ALL_QUERY);
 		preparedStatement.close();		
 	}
-	
-	@Override
-	public Customer getCustomerByName(final String name) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public void update(final Customer customer) throws SQLException {
@@ -83,6 +95,19 @@ public class CustomerDAOImpl implements CustomerDAO{
 		
 	}
 
+	
+	private Customer getCustomerQuery(final String query) throws SQLException {
+		final Statement preparedStatement = createStatement();
+		final ResultSet resultSet = preparedStatement.executeQuery(query);	
+		Customer customer = null;
+		if(resultSet.next()) {
+			customer = extractCustomer(resultSet);
+		}
+		resultSet.close();
+		preparedStatement.close();
+		return customer;
+	}
+	
 	
 	private Customer extractCustomer(final ResultSet resultSet) throws SQLException {
 		final int customerID = resultSet.getInt("id");
@@ -99,16 +124,14 @@ public class CustomerDAOImpl implements CustomerDAO{
 		return customer;
 	}
 	
+	
 	private Statement createStatement() throws SQLException {
 		return database.getConnection().createStatement();
 	}
 	
 	
 	private PreparedStatement prepareStatement(final String query) throws SQLException {
-		return database.getConnection().prepareStatement(query);
+		return database.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 	}
-
-
-
 	
 }

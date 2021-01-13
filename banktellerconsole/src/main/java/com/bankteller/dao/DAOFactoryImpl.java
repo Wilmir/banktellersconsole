@@ -15,8 +15,7 @@ public class DAOFactoryImpl implements DAOAbstractFactory{
 
 	@Override
 	public AccountDAO getAccountDAO() {
-		// TODO Auto-generated method stub
-		return null;
+		return new AccountDAOImpl(database);
 	}
 		
 

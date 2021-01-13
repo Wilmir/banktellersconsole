@@ -7,7 +7,7 @@ import com.bankteller.exceptions.CustomerDoesNotExistException;
 import com.bankteller.exceptions.DataAccessException;
 
 public interface AccountRegistryService {
-	void add(String ppsNumber, String accountType) throws DataAccessException, CustomerDoesNotExistException;
+	Account add(String ppsNumber, String accountType) throws DataAccessException, CustomerDoesNotExistException;
 
 
 }

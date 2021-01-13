@@ -8,7 +8,7 @@ import com.bankteller.exceptions.CustomerAlreadyExistsException;
 import com.bankteller.exceptions.DataAccessException;
 
 public interface CustomerRegistryService {
-	void add(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) throws DataAccessException, CustomerAlreadyExistsException;
+	Customer add(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) throws DataAccessException, CustomerAlreadyExistsException;
 	
 	Customer getCustomer(final String name) throws DataAccessException;
 

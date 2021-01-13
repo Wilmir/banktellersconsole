@@ -25,7 +25,7 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 	}
 	
 	@Override
-	public void add(final String ppsNumber, final String accountType) throws DataAccessException, CustomerDoesNotExistException{
+	public Account add(final String ppsNumber, final String accountType) throws DataAccessException, CustomerDoesNotExistException{
 		Account account = accountFactory.getAccount(accountType);			
 		try {
 			Customer customer = customerDAO.getCustomerByPPSNumber(ppsNumber);
@@ -34,7 +34,8 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 				throw new CustomerDoesNotExistException("The customer does not exist");
 			}
 			
-			accountDAO.add(customer, account);
+			return accountDAO.add(customer, account);
+			
 		} catch (SQLException e) {
 			throw new DataAccessException("The database failed to add the account.");
 		}

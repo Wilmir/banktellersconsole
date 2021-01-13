@@ -18,12 +18,14 @@ public class CustomerRegistryServiceImpl implements CustomerRegistryService{
 	}
 	
 	@Override
-	public void add(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address)
+	public Customer add(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address)
 			throws DataAccessException, CustomerAlreadyExistsException {
 			try {
 				if(customerDAO.getCustomerByPPSNumber(ppsNumber) == null) {
 					final Customer customer = new Customer(firstName, lastName, dateOfBirth, ppsNumber, address);
-					customerDAO.add(customer);
+					
+					return customerDAO.add(customer);
+					
 				}else {
 					throw new CustomerAlreadyExistsException("Customer already exists");
 				}		
