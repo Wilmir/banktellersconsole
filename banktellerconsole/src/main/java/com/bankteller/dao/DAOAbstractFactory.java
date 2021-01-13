@@ -5,4 +5,6 @@ public interface DAOAbstractFactory {
 
 	AccountDAO getAccountDAO();
 
+	TransactionDAO getTransactionDAO();
+
 }

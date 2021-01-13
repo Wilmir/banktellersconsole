@@ -17,6 +17,11 @@ public class DAOFactoryImpl implements DAOAbstractFactory{
 	public AccountDAO getAccountDAO() {
 		return new AccountDAOImpl(database);
 	}
+
+	@Override
+	public TransactionDAO getTransactionDAO() {
+		return null;
+	}
 		
 
 }

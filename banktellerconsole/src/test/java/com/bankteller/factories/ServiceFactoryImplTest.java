@@ -10,7 +10,9 @@ import com.bankteller.dao.CustomerDAOImpl;
 import com.bankteller.dao.DAOAbstractFactory;
 import com.bankteller.dao.DAOFactoryImpl;
 import com.bankteller.dao.Database;
+import com.bankteller.entities.TransactionType;
 import com.bankteller.services.AccountRegistryServiceImpl;
+import com.bankteller.services.CreditServiceImpl;
 import com.bankteller.services.CustomerRegistryServiceImpl;
 import com.bankteller.services.ServiceAbstractFactory;
 import com.bankteller.services.ServiceFactoryImpl;
@@ -32,6 +34,11 @@ class ServiceFactoryImplTest {
 	@Test
 	void testGetAccountDAO() {
 		assertTrue(serviceFactory.getAccountRegistryService() instanceof AccountRegistryServiceImpl);
+	}
+	
+	@Test 
+	void testGetCreditTransactionService(){
+		assertTrue(serviceFactory.getTransactionService(TransactionType.CREDIT) instanceof CreditServiceImpl);
 	}
 
 }
