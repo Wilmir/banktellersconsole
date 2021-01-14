@@ -14,7 +14,6 @@ import com.bankteller.entities.Customer;
 import com.bankteller.entities.SavingsAccount;
 
 
-
 public class AccountDAOImpl implements AccountDAO{
 	private final Database database;
 	private static final String ADD_ACCOUNT_QUERY = "INSERT INTO accounts (type, customerID) VALUES (?, ?)",

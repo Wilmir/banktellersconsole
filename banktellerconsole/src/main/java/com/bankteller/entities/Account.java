@@ -1,12 +1,16 @@
 package com.bankteller.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class Account {
 	private int accountNumber;
 	private AccountType type;
 	private LocalDateTime dateCreated;
 	private double balance;
+	private final List<Transaction> transactions = new ArrayList<>();
 	
 	public Account(final AccountType type) {
 		this.type = type;
@@ -50,6 +54,18 @@ public abstract class Account {
 		this.balance = balance;
 	}
 
+	public void addTransaction(final Transaction transaction) {
+		this.transactions.add(transaction);
+	}
+	
+	public List<Transaction> getTransactions() {
+		final List<Transaction> copyOfTransactions = new ArrayList<Transaction>(transactions);
+		
+		Collections.sort(copyOfTransactions, Collections.reverseOrder());
+		
+		return copyOfTransactions;
+	}
+	
 	public LocalDateTime getDateCreated() {
 		return dateCreated;
 	}

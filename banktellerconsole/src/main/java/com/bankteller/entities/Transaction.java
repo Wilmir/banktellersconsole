@@ -1,13 +1,14 @@
 package com.bankteller.entities;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Transaction implements Comparable<Transaction>{
 	private final double amount;
-	private double postTransactionBalance;
+	private final double postTransactionBalance;
 	private LocalDateTime dateCreated;
-	private boolean isDebit;
+	private final boolean isDebit;
 	
 	public Transaction(final boolean isDebit, final double amount, final double postTransactionBalance) {
 		this.amount = amount;
@@ -31,16 +32,8 @@ public class Transaction implements Comparable<Transaction>{
 		return isDebit;
 	}
 
-	public void setDebit(final boolean isDebit) {
-		this.isDebit = isDebit;
-	}
-
 	public double getPostTransactionBalance() {
 		return postTransactionBalance;
-	}
-
-	public void setPostTransactionBalance(final double postTransactionBalance) {
-		this.postTransactionBalance = postTransactionBalance;
 	}
 
 	@Override

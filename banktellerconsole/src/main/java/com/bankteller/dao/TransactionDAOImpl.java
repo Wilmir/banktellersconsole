@@ -69,7 +69,6 @@ public class TransactionDAOImpl implements TransactionDAO{
 		} finally {
 			resultSet.close();
 			preparedStatement.close();
-			
 		}
 	}
 

@@ -1,13 +1,16 @@
 package com.bankteller.services;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.bankteller.dao.AccountDAO;
 import com.bankteller.dao.CustomerDAO;
 import com.bankteller.dao.DAOAbstractFactory;
+import com.bankteller.dao.TransactionDAO;
 import com.bankteller.entities.Account;
 import com.bankteller.entities.AccountFactory;
 import com.bankteller.entities.Customer;
+import com.bankteller.entities.Transaction;
 import com.bankteller.exceptions.AccountNotFoundException;
 import com.bankteller.exceptions.CustomerDoesNotExistException;
 import com.bankteller.exceptions.DataAccessException;
@@ -16,13 +19,14 @@ import com.bankteller.exceptions.DataAccessException;
 public class AccountRegistryServiceImpl implements AccountRegistryService{
 	private final AccountDAO accountDAO;
 	private final CustomerDAO customerDAO;
+	private final TransactionDAO transactionDAO;
 	private final AccountFactory accountFactory;
-	
 	
 	public AccountRegistryServiceImpl(final DAOAbstractFactory daoFactory, 
 			final AccountFactory accountFactory) {
 		this.accountDAO = daoFactory.getAccountDAO();
 		this.customerDAO = daoFactory.getCustomerDAO();
+		this.transactionDAO = daoFactory.getTransactionDAO();
 		this.accountFactory = accountFactory;
 	}
 	
@@ -56,14 +60,18 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 				throw new AccountNotFoundException("No account with account number " +  accountNumber + " found.");
 			}
 			
-			return account;
+			final List<Transaction> transactions = transactionDAO.getTransactions(account);
+			
+			
+			return addTransactionsToAccount(account, transactions);
+				
 			
 		} catch (SQLException e) {
 			throw new DataAccessException("The database failed to fetch the account.");
 		}
 	}
 
-
+	
 	@Override
 	public void update(final Account account) throws DataAccessException {
 		try {
@@ -73,6 +81,13 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 		}		
 	}
 	
-
+	
+	private Account addTransactionsToAccount(final Account account, final List<Transaction> transactions) {
+		for(final Transaction transaction : transactions) {
+			account.addTransaction(transaction);
+		}
+		return account;
+	}
+	
 
 }
