@@ -1,0 +1,5 @@
+﻿balance,firstWithdrawalAmount,secondWithdrawalAmount,extpectedRemainingBalance,transactionCount
+0.03,0.02,0.01,0,2
+0.03,0.01,0.01,0.01,2
+29980.5,9980.00,19.99,19980.51,2
+29980.5,9980.00,20,19980.5,2

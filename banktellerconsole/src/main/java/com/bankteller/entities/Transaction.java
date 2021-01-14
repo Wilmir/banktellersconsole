@@ -14,6 +14,7 @@ public class Transaction implements Comparable<Transaction>{
 		this.amount = amount;
 		this.isDebit = isDebit;
 		this.postTransactionBalance = postTransactionBalance;
+		this.dateCreated = LocalDateTime.now();
 	}
 
 	public double getAmount() {

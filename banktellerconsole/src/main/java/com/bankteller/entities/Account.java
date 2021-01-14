@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.bankteller.exceptions.NotEnoughBalanceException;
+import com.bankteller.exceptions.WithrawalLimitExceededException;
+
 public abstract class Account {
 	private int accountNumber;
 	private AccountType type;
@@ -21,6 +24,9 @@ public abstract class Account {
 		this.accountNumber = accountNumber;
 	}
 	
+	
+	abstract Transaction withdraw(double amount) throws WithrawalLimitExceededException, NotEnoughBalanceException;
+
 	public int getAccountNumber() {
 		return accountNumber;
 	}
@@ -52,8 +58,8 @@ public abstract class Account {
 
 	public void setBalance(final double balance) {
 		this.balance = balance;
-	}
-
+	}	
+	
 	public void addTransaction(final Transaction transaction) {
 		this.transactions.add(transaction);
 	}

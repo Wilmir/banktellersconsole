@@ -20,7 +20,7 @@ Feature: Add A Customer
     Given The bank teller is asked to enter the 8 digit account number
     And The account "<accountNumber>" DOES NOT exist in the system
     When The bank teller enters the "<accountNumber>"
-    Then Then the message "No account associated with" "<accountNumber>" "exists"
+    Then the message "No account associated with" "<accountNumber>" "exists"
   
   Examples: 
       | accountNumber |
