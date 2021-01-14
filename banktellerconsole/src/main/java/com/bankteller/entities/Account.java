@@ -1,5 +1,7 @@
 package com.bankteller.entities;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,8 +26,9 @@ public abstract class Account {
 		this.accountNumber = accountNumber;
 	}
 	
+	public abstract Transaction withdraw(double amount) throws WithrawalLimitExceededException, NotEnoughBalanceException;
 	
-	abstract Transaction withdraw(double amount) throws WithrawalLimitExceededException, NotEnoughBalanceException;
+	public abstract Transaction deposit(double amount);
 
 	public int getAccountNumber() {
 		return accountNumber;
@@ -53,7 +56,9 @@ public abstract class Account {
 	
 	
 	public double getBalance() {
-		return balance;
+	    BigDecimal bigDecimal = BigDecimal.valueOf(balance);
+	    bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
+	    return bigDecimal.doubleValue();
 	}
 
 	public void setBalance(final double balance) {
@@ -80,10 +85,20 @@ public abstract class Account {
 		this.dateCreated = dateCreated;
 	}
 
+	Transaction createTransaction(final boolean isDebit, final double amount, final double newBalance) {
+		final Transaction transaction = new Transaction(isDebit, amount, newBalance);
+		addTransaction(transaction);
+		return transaction;
+	}
+	
+	double updateBalance(final double amount) {
+		this.setBalance(balance + amount);
+		return balance + amount;
+	}
+	
 	@Override
 	public String toString() {
 		return type + " ACCOUNT # : " + accountNumber + "\t\t" + "BALANCE: " +  String.format("%.2f", balance);
 	}
-
 	
 }

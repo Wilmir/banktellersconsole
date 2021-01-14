@@ -9,14 +9,21 @@ public class SavingsAccount extends Account{
 	}
 
 	@Override
-	Transaction withdraw(final double amount) throws NotEnoughBalanceException {
-		
-		final double balance = this.getBalance();
-		
-		if(amount < balance) {
+	public Transaction withdraw(final double amount) throws NotEnoughBalanceException {
+		if(amount > this.getBalance()) {
 			throw new NotEnoughBalanceException("Account does not have enough balance");
 		}
 		
-		return new Transaction(true, amount, balance - amount);
+		final double newBalance = updateBalance(-amount);
+
+		return createTransaction(true, amount, newBalance);	
 	}
+
+	@Override
+	public Transaction deposit(final double amount) {
+		final double newBalance = updateBalance(amount);
+				
+		return createTransaction(false, amount, newBalance);	
+	}
+	
 }

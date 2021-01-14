@@ -33,13 +33,11 @@ import com.bankteller.entities.Transaction;
 import com.bankteller.exceptions.AccountNotFoundException;
 import com.bankteller.exceptions.CustomerDoesNotExistException;
 import com.bankteller.exceptions.DataAccessException;
-import com.bankteller.services.AccountRegistryService;
-import com.bankteller.services.AccountRegistryServiceImpl;
+
 
 class AccountRegistryServiceImplTest {
 	private static final double DEPOSIT_AMOUNT = 3001.14;
 	private static final String SAVINGS_ACOUNT_TYPE = "savings";
-	private static final String CREDIT_ACCOUNT_TYPE = "credit";
 	private static final String ADDRESS = "Dublin, Ireland";
 	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
 	private static final String LAST_NAME = "Nicanor";

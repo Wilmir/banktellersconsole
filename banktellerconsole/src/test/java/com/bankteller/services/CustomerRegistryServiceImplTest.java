@@ -14,7 +14,6 @@ import com.bankteller.dao.DAOAbstractFactory;
 import com.bankteller.entities.Customer;
 import com.bankteller.exceptions.CustomerAlreadyExistsException;
 import com.bankteller.exceptions.DataAccessException;
-import com.bankteller.services.CustomerRegistryServiceImpl;
 
 
 class CustomerRegistryServiceImplTest {

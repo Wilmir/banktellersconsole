@@ -9,6 +9,8 @@ import com.bankteller.exceptions.CustomerAlreadyExistsException;
 import com.bankteller.exceptions.CustomerDoesNotExistException;
 import com.bankteller.exceptions.DataAccessException;
 import com.bankteller.exceptions.InvalidAmountException;
+import com.bankteller.exceptions.NotEnoughBalanceException;
+import com.bankteller.exceptions.WithrawalLimitExceededException;
 
 
 public interface BankSystemManager {
@@ -17,5 +19,9 @@ public interface BankSystemManager {
 	Account addAccount(final String ppsNumber, final String accountType) throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException;
 
 	void credit(int accountNumber, double amount)
-			throws InvalidAmountException, DataAccessException, AccountNotFoundException;
+			throws InvalidAmountException, DataAccessException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException;
+
+	void debit(int accountNumber, double amount)
+			throws InvalidAmountException, DataAccessException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException;
+
 }

@@ -9,6 +9,8 @@ import com.bankteller.entities.Transaction;
 import com.bankteller.exceptions.AccountNotFoundException;
 import com.bankteller.exceptions.DataAccessException;
 import com.bankteller.exceptions.InvalidAmountException;
+import com.bankteller.exceptions.NotEnoughBalanceException;
+import com.bankteller.exceptions.WithrawalLimitExceededException;
 
 
 public abstract class TransactionService {	
@@ -20,9 +22,7 @@ public abstract class TransactionService {
 		this.transactionDAO = daoFactory.getTransactionDAO();
 	}
 	
-	
-	public abstract void execute(int accountNumber, double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException;
-	
+	public abstract void execute(int accountNumber, double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException, WithrawalLimitExceededException, NotEnoughBalanceException;
 	
 	Account retrieveAccount(final int accountNumber) throws DataAccessException, AccountNotFoundException {
 		return accountRegistryService.getAccount(accountNumber);

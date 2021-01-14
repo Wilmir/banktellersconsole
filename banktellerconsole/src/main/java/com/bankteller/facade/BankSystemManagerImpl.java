@@ -4,26 +4,32 @@ import java.time.LocalDate;
 
 import com.bankteller.entities.Account;
 import com.bankteller.entities.Customer;
-import com.bankteller.entities.TransactionType;
 import com.bankteller.exceptions.AccountNotFoundException;
 import com.bankteller.exceptions.CustomerAlreadyExistsException;
 import com.bankteller.exceptions.CustomerDoesNotExistException;
 import com.bankteller.exceptions.DataAccessException;
 import com.bankteller.exceptions.InvalidAmountException;
+import com.bankteller.exceptions.NotEnoughBalanceException;
+import com.bankteller.exceptions.WithrawalLimitExceededException;
 import com.bankteller.services.AccountRegistryService;
+import com.bankteller.services.CreditService;
 import com.bankteller.services.CustomerRegistryService;
+import com.bankteller.services.DebitService;
 import com.bankteller.services.ServiceAbstractFactory;
-import com.bankteller.services.TransactionService;
 
 public class BankSystemManagerImpl implements BankSystemManager{
 	private final CustomerRegistryService customerRegistryService;
 	private final AccountRegistryService accountRegistryService;
-	private final TransactionService creditService;
+	private final CreditService creditService;
+	private final DebitService debitService;
+
 	
 	public BankSystemManagerImpl(final ServiceAbstractFactory serviceFactory) {
 		customerRegistryService = serviceFactory.getCustomerRegistryService();
 		accountRegistryService = serviceFactory.getAccountRegistryService();
-		creditService = serviceFactory.getTransactionService(TransactionType.CREDIT);
+		creditService = serviceFactory.getCreditService();
+		debitService = serviceFactory.getDebitService();
+
 	}
 	
 	@Override
@@ -41,10 +47,13 @@ public class BankSystemManagerImpl implements BankSystemManager{
 	
 	@Override
 	public void credit(final int accountNumber, final double amount)
-			throws InvalidAmountException, DataAccessException, AccountNotFoundException {
-		creditService.execute(accountNumber, amount);
+			throws InvalidAmountException, DataAccessException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
+		creditService.credit(accountNumber, amount);
 	}
 
-	
-	
+	@Override
+	public void debit(final int accountNumber, final double amount) throws InvalidAmountException, DataAccessException,
+			AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
+		debitService.debit(accountNumber, amount);
+	}
 }

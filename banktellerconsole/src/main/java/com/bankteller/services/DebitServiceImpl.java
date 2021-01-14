@@ -6,23 +6,26 @@ import com.bankteller.entities.Transaction;
 import com.bankteller.exceptions.AccountNotFoundException;
 import com.bankteller.exceptions.DataAccessException;
 import com.bankteller.exceptions.InvalidAmountException;
+import com.bankteller.exceptions.NotEnoughBalanceException;
+import com.bankteller.exceptions.WithrawalLimitExceededException;
 
-public class CreditServiceImpl extends TransactionService implements CreditService{	
+public class DebitServiceImpl extends TransactionService implements DebitService{	
 	
-	public CreditServiceImpl(final DAOAbstractFactory daoFactory, 
+	public DebitServiceImpl(final DAOAbstractFactory daoFactory, 
 			final AccountRegistryService accountRegistryService) {
 		
 		super(daoFactory, accountRegistryService);	
 	}
 	
+	
 	@Override
-	public void credit(final int accountNumber, final double amount)
-			throws DataAccessException, AccountNotFoundException, InvalidAmountException {
+	public void debit(final int accountNumber, final double amount) throws DataAccessException, AccountNotFoundException,
+			InvalidAmountException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		execute(accountNumber, amount);
 	}
 	
 	@Override
-	public void execute(final int accountNumber, final double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException {
+	public void execute(final int accountNumber, final double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		if(amount < 0) {
 			throw new InvalidAmountException("Negative withdrawal amount is not accepted " + amount);
 		}		
@@ -33,14 +36,11 @@ public class CreditServiceImpl extends TransactionService implements CreditServi
 			throw new AccountNotFoundException("No account found with this account number: " + accountNumber);
 		}
 		
-		final Transaction transaction = account.deposit(amount);
+		final Transaction transaction = account.withdraw(amount);
 		
 		updateCurrentAccountBalance(account, amount);
 	
 		storeTransaction(transaction, account);
 	}
-
-
-
 	
 }

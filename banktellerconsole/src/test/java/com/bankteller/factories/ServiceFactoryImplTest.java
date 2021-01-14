@@ -7,10 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bankteller.dao.DAOAbstractFactory;
-import com.bankteller.entities.TransactionType;
 import com.bankteller.services.AccountRegistryServiceImpl;
 import com.bankteller.services.CreditServiceImpl;
 import com.bankteller.services.CustomerRegistryServiceImpl;
+import com.bankteller.services.DebitServiceImpl;
 import com.bankteller.services.ServiceAbstractFactory;
 import com.bankteller.services.ServiceFactoryImpl;
 
@@ -35,7 +35,12 @@ class ServiceFactoryImplTest {
 	
 	@Test 
 	void testGetCreditTransactionService(){
-		assertTrue(serviceFactory.getTransactionService(TransactionType.CREDIT) instanceof CreditServiceImpl);
+		assertTrue(serviceFactory.getCreditService() instanceof CreditServiceImpl);
+	}
+	
+	@Test 
+	void testGetDebitTransactionService(){
+		assertTrue(serviceFactory.getDebitService() instanceof DebitServiceImpl);
 	}
 
 }

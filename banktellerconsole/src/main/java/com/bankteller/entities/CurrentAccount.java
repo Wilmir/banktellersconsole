@@ -1,7 +1,5 @@
 package com.bankteller.entities;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -34,20 +32,20 @@ public class CurrentAccount extends Account{
 			throw new WithrawalLimitExceededException("Withdrawal limit is reached");
 		}
 		
-	    BigDecimal bigDecimal = BigDecimal.valueOf(this.getBalance());
-	    bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
-	    final double balance = bigDecimal.doubleValue();
-	
-	    
-		if(amount > balance) {
+		if(amount > this.getBalance()) {
 			throw new NotEnoughBalanceException("Account does not have enough balance");
 		}
 	
-		this.setBalance(balance - amount);
-		final Transaction transaction = new Transaction(true, amount, balance - amount);
-		this.addTransaction(transaction);
+		final double newBalance = updateBalance(-amount);
+
+		return createTransaction(true, amount, newBalance);	
+	}
+
+	@Override
+	public Transaction deposit(final double amount) {
+		final double newBalance = updateBalance(amount);
 		
-		return transaction;
+		return createTransaction(false, amount, newBalance);
 	}
 	
 	
