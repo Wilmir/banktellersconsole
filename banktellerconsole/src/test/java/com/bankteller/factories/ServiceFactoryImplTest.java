@@ -6,10 +6,7 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bankteller.dao.CustomerDAOImpl;
 import com.bankteller.dao.DAOAbstractFactory;
-import com.bankteller.dao.DAOFactoryImpl;
-import com.bankteller.dao.Database;
 import com.bankteller.entities.TransactionType;
 import com.bankteller.services.AccountRegistryServiceImpl;
 import com.bankteller.services.CreditServiceImpl;

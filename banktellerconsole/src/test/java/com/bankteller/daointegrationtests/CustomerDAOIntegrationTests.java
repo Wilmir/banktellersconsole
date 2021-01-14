@@ -1,4 +1,4 @@
-package com.teller.daointegrationtests;
+package com.bankteller.daointegrationtests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +56,7 @@ public class CustomerDAOIntegrationTests {
 	void testAddOneCustomer() throws SQLException{
 		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 
-		final Customer retrievedCustomer =  customerDAO.add(customer);
+		customerDAO.add(customer);
 		
 		assertEquals(1, customerDAO.getCustomers().size());
 	}
@@ -68,8 +67,8 @@ public class CustomerDAOIntegrationTests {
 		final Customer customer1 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 		final Customer customer2 = new Customer(FIRST_NAME2, LAST_NAME2, DATE_OF_BIRTH2, PPS_NUMBER2, ADDRESS2);
 
-		final Customer retrievedCustomer1 = customerDAO.add(customer1);
-		final Customer retrievedCustomer2 = customerDAO.add(customer2);
+		customerDAO.add(customer1);
+		customerDAO.add(customer2);
 
 		assertEquals(2, customerDAO.getCustomers().size());		
 	}

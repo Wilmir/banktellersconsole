@@ -1,10 +1,9 @@
-package com.teller.services;
+package com.bankteller.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +21,7 @@ import com.bankteller.services.CreditServiceImpl;
 import com.bankteller.services.TransactionService;
 
 public class CreditServiceImplTest {
-	private static final String SAVINGS_ACOUNT_TYPE = "savings";
-	private static final String CREDIT_ACCOUNT_TYPE = "credit";
-	private static final String ADDRESS = "Dublin, Ireland";
-	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
-	private static final String LAST_NAME = "Nicanor";
-	private static final String FIRST_NAME = "Wilmir";
-	private static final String PPS_NUMBER = "1234567";
 	private static final int ACCOUNT_NUMBER = 8765432;
-	private static final double ZERO_BALANCE = 0.00;
 	private static final double NEGATIVE_AMOUNT = -3345.76;
 	private static final double DEPOSIT_AMOUNT = 3001.14;
 	private final AccountRegistryService accountRegistryService = mock(AccountRegistryService.class);

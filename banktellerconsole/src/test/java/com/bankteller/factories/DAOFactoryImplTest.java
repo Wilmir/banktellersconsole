@@ -11,7 +11,6 @@ import com.bankteller.dao.CustomerDAOImpl;
 import com.bankteller.dao.DAOFactoryImpl;
 import com.bankteller.dao.Database;
 import com.bankteller.dao.TransactionDAOImpl;
-import com.bankteller.entities.TransactionType;
 
 class DAOFactoryImplTest {
 	private final Database database = mock(Database.class);

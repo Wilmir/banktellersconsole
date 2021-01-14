@@ -1,4 +1,4 @@
-package com.teller.daointegrationtests;
+package com.bankteller.daointegrationtests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +25,6 @@ import com.bankteller.entities.Transaction;
 class TransactionDAOIntegrationTest {
 	private static final double DEPOSIT_AMOUNT = 3001.14;
 	private static final String SAVINGS_ACCOUNT_INPUT = "savings";
-	private static final String CURRENT_ACCOUNT_INPUT = "current";
-	private static final double ZERO_BALANCE = 0.00;
 	private static final String FIRST_NAME = "Wilmir";
 	private static final String LAST_NAME = "Nicanor";
 	private static final String PPS_NUMBER = "1234567";

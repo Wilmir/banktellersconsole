@@ -17,10 +17,8 @@ public class CurrentAccount extends Account{
 	}
 
 	@Override
-	public Transaction withdraw(double amount)
-			throws WithrawalLimitExceededException, NotEnoughBalanceException {
-		final LocalDateTime currentTime = LocalDateTime.now();
-		
+	public Transaction withdraw(final double amount)
+			throws WithrawalLimitExceededException, NotEnoughBalanceException {		
 
 		double transactionTotalin24Hours = amount;
 		
@@ -36,9 +34,9 @@ public class CurrentAccount extends Account{
 			throw new WithrawalLimitExceededException("Withdrawal limit is reached");
 		}
 		
-	    BigDecimal bd = BigDecimal.valueOf(this.getBalance());
-	    bd = bd.setScale(2, RoundingMode.HALF_UP);
-	    final double balance = bd.doubleValue();
+	    BigDecimal bigDecimal = BigDecimal.valueOf(this.getBalance());
+	    bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
+	    final double balance = bigDecimal.doubleValue();
 	
 	    
 		if(amount > balance) {

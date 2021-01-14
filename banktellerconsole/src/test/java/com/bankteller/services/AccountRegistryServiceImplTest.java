@@ -1,9 +1,6 @@
-package com.teller.services;
+package com.bankteller.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.isA;
@@ -80,9 +77,7 @@ class AccountRegistryServiceImplTest {
 	}
 	
 	@Test
-	void testUnSuccessfulCreationDueToSQLError() throws SQLException, DataAccessException, CustomerDoesNotExistException {
-		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-		
+	void testUnSuccessfulCreationDueToSQLError() throws SQLException, DataAccessException, CustomerDoesNotExistException {		
 		when(customerDAO.getCustomerByPPSNumber(PPS_NUMBER)).thenThrow(SQLException.class);
 		
 		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.add(PPS_NUMBER, SAVINGS_ACOUNT_TYPE));

@@ -1,10 +1,8 @@
 package com.bankteller.facade;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Matchers.anyObject;
+
 import static org.mockito.Mockito.*;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package com.teller.daointegrationtests;
+package com.bankteller.daointegrationtests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -75,7 +75,7 @@ class AccounDAOIntegrationTest {
 		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
 		
 		accountDAO.deleteAll();
-		Account retrievedAccount = accountDAO.add(retrievedCustomer, account);
+		final Account retrievedAccount = accountDAO.add(retrievedCustomer, account);
 		
 		assertEquals(expectedCount, accountDAO.getAccounts(retrievedCustomer).size());
 		assertEquals(expectedType, retrievedAccount.getType());
@@ -93,8 +93,8 @@ class AccounDAOIntegrationTest {
 		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
 		
 		accountDAO.deleteAll();
-		Account retrievedAccount1 = accountDAO.add(retrievedCustomer, account1);
-		Account retrievedAccount2 = accountDAO.add(retrievedCustomer, account2);
+		final Account retrievedAccount1 = accountDAO.add(retrievedCustomer, account1);
+		final Account retrievedAccount2 = accountDAO.add(retrievedCustomer, account2);
 
 		assertEquals(2, accountDAO.getAccounts(retrievedCustomer).size());
 		assertEquals(AccountType.CURRENT, retrievedAccount1.getType());

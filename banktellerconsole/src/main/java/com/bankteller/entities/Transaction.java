@@ -1,7 +1,6 @@
 package com.bankteller.entities;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Transaction implements Comparable<Transaction>{
