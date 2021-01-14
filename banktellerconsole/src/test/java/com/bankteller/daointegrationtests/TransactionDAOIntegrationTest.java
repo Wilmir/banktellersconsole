@@ -24,6 +24,7 @@ import com.bankteller.entities.Transaction;
 
 class TransactionDAOIntegrationTest {
 	private static final double DEPOSIT_AMOUNT = 3001.14;
+	private static final double WITHDRAWAL_AMOUNT = 3001.14;
 	private static final String SAVINGS_ACCOUNT_INPUT = "savings";
 	private static final String FIRST_NAME = "Wilmir";
 	private static final String LAST_NAME = "Nicanor";
@@ -58,17 +59,56 @@ class TransactionDAOIntegrationTest {
 		transactionDAO.deleteAll();
 		
 		final Customer newCustomer = customerDAO.add(NEW_CUSTOMER);
-		final Account newAccount = accountDAO.add(newCustomer, NEW_ACCOUNT);
+		Account newAccount = accountDAO.add(newCustomer, NEW_ACCOUNT);
 		final double postTransactionBalance = newAccount.getBalance() + DEPOSIT_AMOUNT;
+		newAccount.setBalance(postTransactionBalance);
+		accountDAO.updateBalance(newAccount);
 		
 		final Transaction transaction = new Transaction(false,DEPOSIT_AMOUNT,postTransactionBalance);
-		
 		final Transaction newTransaction = transactionDAO.add(transaction, newAccount);
 		
+		newAccount = accountDAO.getAccount(newAccount.getAccountNumber());
+
 		assertEquals(DEPOSIT_AMOUNT, newTransaction.getAmount());
 		assertFalse(newTransaction.isDebit());
 		assertEquals(postTransactionBalance, newTransaction.getPostTransactionBalance());
+		assertEquals(postTransactionBalance, newAccount.getBalance());
 		assertEquals(1, transactionDAO.getTransactions(newAccount).size());
+	}
+	
+	@Test
+	void testWithdrawalTransaction() throws SQLException {
+		customerDAO.deleteAll();
+		accountDAO.deleteAll();
+		transactionDAO.deleteAll();
+		
+		// Deposit
+		final Customer newCustomer = customerDAO.add(NEW_CUSTOMER);
+		Account newAccount = accountDAO.add(newCustomer, NEW_ACCOUNT);		
+		double postTransactionBalance = newAccount.getBalance() + DEPOSIT_AMOUNT;
+		newAccount.setBalance(postTransactionBalance);
+		accountDAO.updateBalance(newAccount);
+		
+		Transaction transaction = new Transaction(false,DEPOSIT_AMOUNT,postTransactionBalance);
+		transactionDAO.add(transaction, newAccount);
+
+		
+		// Withdrawal
+		newAccount = accountDAO.getAccount(newAccount.getAccountNumber());
+		postTransactionBalance = newAccount.getBalance() - WITHDRAWAL_AMOUNT;
+		newAccount.setBalance(postTransactionBalance);
+		accountDAO.updateBalance(newAccount);
+		
+		transaction = new Transaction(true,WITHDRAWAL_AMOUNT,postTransactionBalance);
+		final Transaction latestTransaction = transactionDAO.add(transaction, newAccount);
+		
+		newAccount = accountDAO.getAccount(newAccount.getAccountNumber());
+		
+		assertEquals(WITHDRAWAL_AMOUNT, latestTransaction.getAmount());
+		assertTrue(latestTransaction.isDebit());
+		assertEquals(postTransactionBalance, latestTransaction.getPostTransactionBalance());
+		assertEquals(postTransactionBalance, newAccount.getBalance());
+		assertEquals(2, transactionDAO.getTransactions(newAccount).size());
 	}
 
 }
