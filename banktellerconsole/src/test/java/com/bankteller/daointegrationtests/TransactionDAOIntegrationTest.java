@@ -3,7 +3,6 @@ package com.bankteller.daointegrationtests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +29,7 @@ class TransactionDAOIntegrationTest {
 	private static final String LAST_NAME = "Nicanor";
 	private static final String PPS_NUMBER = "1234567";
 	private static final String ADDRESS = "Dublin, Ireland";
-	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
-	private static final Customer NEW_CUSTOMER = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+	private static final Customer NEW_CUSTOMER = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 	private static final AccountFactory accountFactory = new AccountFactory();
 	private static final Account NEW_ACCOUNT = accountFactory.getAccount(SAVINGS_ACCOUNT_INPUT);
 	private final static Database database = new MySQLDatabaseImpl();

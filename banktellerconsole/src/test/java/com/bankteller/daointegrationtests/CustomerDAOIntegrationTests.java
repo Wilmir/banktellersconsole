@@ -3,7 +3,6 @@ package com.bankteller.daointegrationtests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
@@ -25,12 +24,12 @@ public class CustomerDAOIntegrationTests {
 	private static final String LAST_NAME = "Nicanor";
 	private static final String PPS_NUMBER = "1234567";
 	private static final String ADDRESS = "Dublin, Ireland";
-	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
+	private static final Customer CUSTOMER1 = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 	private static final String FIRST_NAME2 = "WILMIR";
 	private static final String LAST_NAME2 = "NICANOR";
 	private static final String PPS_NUMBER2 = "7654321";
 	private static final String ADDRESS2 = "Athlone, Ireland";
-	private static final LocalDate DATE_OF_BIRTH2 = LocalDate.of(1989, 6, 25);
+	private static final Customer CUSTOMER2 = new Customer(FIRST_NAME2, LAST_NAME2, PPS_NUMBER2, ADDRESS2);
 	
 	@BeforeAll
 	static void connectToDB() throws ClassNotFoundException, SQLException {
@@ -55,9 +54,7 @@ public class CustomerDAOIntegrationTests {
 	
 	@Test
 	void testAddOneCustomer() throws SQLException{
-		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-
-		customerDAO.add(customer);
+		customerDAO.add(CUSTOMER1);
 		
 		assertEquals(1, customerDAO.getCustomers().size());
 	}
@@ -65,11 +62,8 @@ public class CustomerDAOIntegrationTests {
 	
 	@Test
 	void testAddTwoCustomers() throws SQLException{
-		final Customer customer1 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-		final Customer customer2 = new Customer(FIRST_NAME2, LAST_NAME2, DATE_OF_BIRTH2, PPS_NUMBER2, ADDRESS2);
-
-		customerDAO.add(customer1);
-		customerDAO.add(customer2);
+		customerDAO.add(CUSTOMER1);
+		customerDAO.add(CUSTOMER2);
 
 		assertEquals(2, customerDAO.getCustomers().size());		
 	}
@@ -77,50 +71,41 @@ public class CustomerDAOIntegrationTests {
 	
 	@Test
 	void testCorrectDataIsStored() throws SQLException{
-		final Customer originalCustomer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-
-		final Customer retrievedCustomer =  customerDAO.add(originalCustomer);
+		final Customer retrievedCustomer =  customerDAO.add(CUSTOMER1);
 		
-		checkIfCorrectDetailsAreRetrieved(originalCustomer, retrievedCustomer);
+		checkIfCorrectDetailsAreRetrieved(CUSTOMER1, retrievedCustomer);
 	}
 	
 	
 	@Test
 	void testGetCustomerByPPSNumber() throws SQLException{
-		final Customer originalCustomer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-
-		customerDAO.add(originalCustomer);
+		customerDAO.add(CUSTOMER1);
 		assertEquals(1, customerDAO.getCustomers().size());		
 
 		final Customer retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
 		
-		checkIfCorrectDetailsAreRetrieved(originalCustomer, retrievedCustomer);
+		checkIfCorrectDetailsAreRetrieved(CUSTOMER1, retrievedCustomer);
 
 	}
 	
 	@Test
 	void testGetCustomerByNameSingleCustomer() throws SQLException{
-		final Customer originalCustomer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-
-		customerDAO.add(originalCustomer);
+		customerDAO.add(CUSTOMER1);
 
 		final List<Customer> customers = customerDAO.getCustomers(FIRST_NAME, LAST_NAME);
 		assertEquals(1, customers.size());
 
 		final Customer retrievedCustomer =customers.get(0);
 		
-		checkIfCorrectDetailsAreRetrieved(originalCustomer, retrievedCustomer);
+		checkIfCorrectDetailsAreRetrieved(CUSTOMER1, retrievedCustomer);
 
 	}
 
 	
 	@Test
 	void testGetCustomerByNameMultipleCustomer() throws SQLException{
-		final Customer originalCustomer1 = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-		final Customer originalCustomer2 = new Customer(FIRST_NAME2, LAST_NAME2, DATE_OF_BIRTH2, PPS_NUMBER2, ADDRESS2);
-
-		customerDAO.add(originalCustomer1);
-		customerDAO.add(originalCustomer2);
+		customerDAO.add(CUSTOMER1);
+		customerDAO.add(CUSTOMER2);
 
 		final List<Customer> customers = customerDAO.getCustomers(FIRST_NAME, LAST_NAME);
 		assertEquals(2, customers.size());
@@ -128,8 +113,8 @@ public class CustomerDAOIntegrationTests {
 		final Customer retrievedCustomer1 =customers.get(0);
 		final Customer retrievedCustomer2 =customers.get(1);
 
-		checkIfCorrectDetailsAreRetrieved(originalCustomer1, retrievedCustomer1);
-		checkIfCorrectDetailsAreRetrieved(originalCustomer2, retrievedCustomer2);
+		checkIfCorrectDetailsAreRetrieved(CUSTOMER1, retrievedCustomer1);
+		checkIfCorrectDetailsAreRetrieved(CUSTOMER2, retrievedCustomer2);
 
 
 	}
@@ -138,7 +123,6 @@ public class CustomerDAOIntegrationTests {
 	private void checkIfCorrectDetailsAreRetrieved(final Customer originalCustomer, final Customer retrievedCustomer) {
 		assertEquals(originalCustomer.getFirstName(), retrievedCustomer.getFirstName());
 		assertEquals(originalCustomer.getLastName(), retrievedCustomer.getLastName());
-		assertEquals(originalCustomer.getDateOfBirth(), retrievedCustomer.getDateOfBirth());
 		assertEquals(originalCustomer.getPpsNumber(), retrievedCustomer.getPpsNumber());
 		assertEquals(originalCustomer.getAddress(), retrievedCustomer.getAddress());
 	}

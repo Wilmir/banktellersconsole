@@ -21,10 +21,6 @@ public abstract class Account {
 		this.type = type;
 	}
 	
-	public Account(final int accountNumber, final AccountType type) {
-		this(type);
-		this.accountNumber = accountNumber;
-	}
 	
 	public abstract Transaction withdraw(double amount) throws WithrawalLimitExceededException, NotEnoughBalanceException;
 	

@@ -10,6 +10,9 @@ public class MySQLDatabaseImpl implements Database{
 	private final static String USERNAME = "root";
 	private final static String PASSWORD = "ilovemyself";
 		
+	public MySQLDatabaseImpl(){
+	}
+	
 	public void connect(){
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

@@ -1,6 +1,5 @@
 package com.bankteller.facade;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.bankteller.entities.Account;
@@ -34,13 +33,19 @@ public class BankSystemManagerImpl implements BankSystemManager{
 	}
 	
 	@Override
-	public Customer addCustomer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) throws DataAccessException, CustomerAlreadyExistsException {
-		return customerRegistryService.add(firstName, lastName, dateOfBirth, ppsNumber, address);
+	public Customer addCustomer(final String firstName, final String lastName, final String ppsNumber, final String address) throws DataAccessException, CustomerAlreadyExistsException {
+		return customerRegistryService.add(firstName, lastName, ppsNumber, address);
 	}
 
 	@Override
-	public List<Customer> getCustomers(String firstName, String lastName) throws DataAccessException {
+	public List<Customer> getCustomers(final String firstName, final String lastName) throws DataAccessException {
 		return customerRegistryService.getCustomers(firstName, lastName);
+	}
+	
+	@Override
+	public Customer getCustomer(final int customerID) throws DataAccessException, CustomerDoesNotExistException {
+		// TODO Auto-generated method stub
+		return customerRegistryService.getCustomer(customerID);
 	}
 	
 	@Override
@@ -48,7 +53,6 @@ public class BankSystemManagerImpl implements BankSystemManager{
 			throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException {
 		return accountRegistryService.add(ppsNumber, accountType);
 	}
-
 	
 	@Override
 	public void credit(final int accountNumber, final double amount)
@@ -61,6 +65,7 @@ public class BankSystemManagerImpl implements BankSystemManager{
 			AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		debitService.debit(accountNumber, amount);
 	}
+
 
 
 }

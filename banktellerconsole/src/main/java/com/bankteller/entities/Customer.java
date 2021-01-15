@@ -1,21 +1,21 @@
 package com.bankteller.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Customer {
 	private int customerId;
 	private final String firstName;
 	private final String lastName;
-	private final LocalDate dateOfBirth;
 	private LocalDateTime dateOfRegistration;
 	private final String ppsNumber;
 	private final String address;
+	private final List<Account> accounts = new ArrayList<>();
 	
-	public Customer(final String firstName, final String lastName, final LocalDate dateOfBirth, final String ppsNumber, final String address) {
+	public Customer(final String firstName, final String lastName, final String ppsNumber, final String address) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.dateOfBirth = dateOfBirth;
 		this.ppsNumber = ppsNumber;
 		this.address = address;
 	}
@@ -36,10 +36,6 @@ public class Customer {
 		return lastName;
 	}
 
-	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
-	}
-
 	public void setDateOfRegistration(final LocalDateTime dateOfRegistration) {
 		this.dateOfRegistration = dateOfRegistration;
 	}
@@ -52,10 +48,19 @@ public class Customer {
 		return address;
 	}
 
+	public void add(final Account account) {
+		accounts.add(account);
+	}
+	
+	public List<Account> getAccounts(){
+		return new ArrayList<Account>(accounts);
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", dateOfBirth=" + dateOfBirth + ", dateOfRegistration=" + dateOfRegistration + ", ppsNumber="
+				+ ", dateOfRegistration=" + dateOfRegistration + ", ppsNumber="
 				+ ppsNumber + ", address=" + address + "]";
 	}
 }

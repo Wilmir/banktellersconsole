@@ -19,7 +19,6 @@ public class AccountDAOImpl implements AccountDAO{
 	private static final String ADD_ACCOUNT_QUERY = "INSERT INTO accounts (type, customerID) VALUES (?, ?)",
 			GET_CUSTOMER_ACCOUNTS_QUERY = "SELECT * FROM accounts WHERE customerID = ",
 			GET_A_SINGLE_ACCOUNT_QUERY = "SELECT * FROM accounts WHERE id = ",
-			GET_ACCOUNT_TRANSACTIONS_QUERY = "SELECT * FROM transactions WHERE accountID = ",
 			UPDATE_ACCOUNT_BALANCE_QUERY = "UPDATE accounts SET balance = ? WHERE id = ?",
 			DELETE_ALL_QUERY = "DELETE FROM accounts";
 

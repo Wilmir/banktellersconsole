@@ -3,7 +3,6 @@ package com.bankteller.daointegrationtests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterAll;
@@ -36,8 +35,7 @@ class AccounDAOIntegrationTest {
 	private static final String LAST_NAME = "Nicanor";
 	private static final String PPS_NUMBER = "1234567";
 	private static final String ADDRESS = "Dublin, Ireland";
-	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
-	private static final Customer NEW_CUSTOMER = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+	private static final Customer NEW_CUSTOMER = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 	private Customer retrievedCustomer;
 	private AccountDAO accountDAO;
 	private CustomerDAO customerDAO;

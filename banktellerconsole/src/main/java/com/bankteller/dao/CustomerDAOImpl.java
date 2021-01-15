@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import com.bankteller.entities.Customer;
 
 public class CustomerDAOImpl implements CustomerDAO{
 	private final Database database;
-	private static final String ADD_CUSTOMER_QUERY = "INSERT INTO customers (firstName, lastName, dateOfBirth, ppsNumber, address) VALUES (?, ?, ?, ?, ?)",
+	private static final String ADD_CUSTOMER_QUERY = "INSERT INTO customers (firstName, lastName, ppsNumber, address) VALUES (?, ?, ?, ?)",
 			GET_CUSTOMERS_QUERY = "SELECT * FROM customers",
 			GET_A_SINGLE_CUSTOMER_BY_PPSNUMBER = "SELECT * FROM customers WHERE ppsNumber = ",
 			GET_A_SINGLE_CUSTOMER_BY_ID = "SELECT * FROM customers WHERE id = ",
@@ -31,14 +30,13 @@ public class CustomerDAOImpl implements CustomerDAO{
 		try {
 			preparedStatement.setString(1, customer.getFirstName());
 			preparedStatement.setString(2, customer.getLastName());
-			preparedStatement.setObject(3, customer.getDateOfBirth());
-			preparedStatement.setString(4, customer.getPpsNumber());
-			preparedStatement.setString(5, customer.getAddress());
+			preparedStatement.setString(3, customer.getPpsNumber());
+			preparedStatement.setString(4, customer.getAddress());
 			preparedStatement.executeUpdate();
 			
 			
 			Customer newCustomer = null;
-			ResultSet resultSet = preparedStatement.getGeneratedKeys();	
+			final ResultSet resultSet = preparedStatement.getGeneratedKeys();	
 			
 			try {
 				if(resultSet.next()) {
@@ -146,9 +144,8 @@ public class CustomerDAOImpl implements CustomerDAO{
 		final String lastName = resultSet.getString("lastName");
 		final String ppsNumber = resultSet.getString("ppsNumber");
 		final String address = resultSet.getString("address");
-		final LocalDate dateOfBirth = resultSet.getObject("dateOfBirth", LocalDate.class);
 		final LocalDateTime dateCreated = resultSet.getObject("dateCreated", LocalDateTime.class);
-		final Customer customer = new Customer(firstName, lastName, dateOfBirth, ppsNumber, address);
+		final Customer customer = new Customer(firstName, lastName, ppsNumber, address);
 		customer.setCustomerId(customerID);
 		customer.setDateOfRegistration(dateCreated);
 

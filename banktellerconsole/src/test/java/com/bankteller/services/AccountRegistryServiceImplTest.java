@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +38,10 @@ class AccountRegistryServiceImplTest {
 	private static final double DEPOSIT_AMOUNT = 3001.14;
 	private static final String SAVINGS_ACOUNT_TYPE = "savings";
 	private static final String ADDRESS = "Dublin, Ireland";
-	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
 	private static final String LAST_NAME = "Nicanor";
 	private static final String FIRST_NAME = "Wilmir";
 	private static final String PPS_NUMBER = "1234567";
+	private static final Customer CUSTOMER1 = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 	private static final int ACCOUNT_NUMBER = 8765432;
 	private static final double ZERO_BALANCE = 0.00;
 	private final AccountDAO accountDAO = mock(AccountDAO.class);
@@ -63,9 +62,7 @@ class AccountRegistryServiceImplTest {
 	
 	@Test
 	void testSuccessfulCreationOfSavingsAccount() throws SQLException, DataAccessException, CustomerDoesNotExistException {
-		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-		
-		when(customerDAO.getCustomerByPPSNumber(PPS_NUMBER)).thenReturn(customer);
+		when(customerDAO.getCustomerByPPSNumber(PPS_NUMBER)).thenReturn(CUSTOMER1);
 		
 		accountRegistryService.add(PPS_NUMBER, SAVINGS_ACOUNT_TYPE);
 		
@@ -80,7 +77,7 @@ class AccountRegistryServiceImplTest {
 		
 		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.add(PPS_NUMBER, SAVINGS_ACOUNT_TYPE));
 		
-		assertEquals("The database failed to add the account.", exception.getMessage());
+		assertEquals("The database failed to process the request.", exception.getMessage());
 				
 		verify(customerDAO, times(1)).getCustomerByPPSNumber(PPS_NUMBER);
 		verify(accountDAO, times(0)).add(isA(Customer.class), isA(SavingsAccount.class));
@@ -175,7 +172,7 @@ class AccountRegistryServiceImplTest {
 		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.getAccount(ACCOUNT_NUMBER));
 		
 		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
-		assertEquals("The database failed to fetch the account.", exception.getMessage());
+		assertEquals("The database failed to process the request.", exception.getMessage());
 	}
 	
 	
@@ -207,7 +204,7 @@ class AccountRegistryServiceImplTest {
 		
 		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.update(account));
 		
-		assertEquals("The database failed to update the account.", exception.getMessage());
+		assertEquals("The database failed to process the request.", exception.getMessage());
 		
 		verify(accountDAO, times(1)).updateBalance(account);
 	}

@@ -79,7 +79,7 @@ public class DeditServiceImplTest {
 		
 		final Throwable exception = assertThrows(DataAccessException.class, () -> debitService.debit(ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT));
 		
-		assertEquals("Transaction Failed: The database failed to store the transaction", exception.getMessage());
+		assertEquals("The database failed to process the request.", exception.getMessage());
 		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(accountRegistryService, times(1)).update(account);
 		verify(transactionDAO, times(1)).add(isA(Transaction.class), isA(Account.class));

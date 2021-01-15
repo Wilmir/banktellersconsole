@@ -7,7 +7,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,16 +30,17 @@ import com.bankteller.services.DebitService;
 import com.bankteller.services.ServiceAbstractFactory;
 
 class BankSystemManagerImplTest {
+	private static final int CUSTOMERID = 1234567;
 	private static final double DEPOSIT_AMOUNT = 1000.00;
 	private static final double WITHDRAWAL_AMOUNT = 1000.00;
 	private static final int ACCOUNT_NUMBER = 88888888;
 	private static final String SAVINGS_ACOUNT_TYPE = "savings";
 	private static final String CREDIT_ACCOUNT_TYPE = "credit";
 	private static final String ADDRESS = "Dublin, Ireland";
-	private static final LocalDate DATE_OF_BIRTH = LocalDate.of(1995, 3, 18);
 	private static final String LAST_NAME = "Nicanor";
 	private static final String FIRST_NAME = "Wilmir";
 	private static final String PPS_NUMBER = "1234567";
+	private static final Customer CUSTOMER1 = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 	private final CustomerRegistryService customerRegistryService = mock(CustomerRegistryService.class);
 	private final AccountRegistryService accountRegistryService = mock(AccountRegistryService.class);
 	private final CreditService creditService = mock(CreditService.class);
@@ -62,23 +62,31 @@ class BankSystemManagerImplTest {
 	
 	@Test
 	void testSuccessfulCustomerCreation() throws DataAccessException, CustomerAlreadyExistsException {
-		bankSystemManager.addCustomer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+		bankSystemManager.addCustomer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 		
-		verify(customerRegistryService, times(1)).add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+		verify(customerRegistryService, times(1)).add(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 	}
 	
 	
 	@Test
 	void testGetCustomersByName() throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		final List<Customer> customers = new ArrayList<>();
-		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
-		customers.add(customer);
+		customers.add(CUSTOMER1);
 		
 		when(customerRegistryService.getCustomers(FIRST_NAME, LAST_NAME)).thenReturn(customers);
 		
 		assertEquals(customers, bankSystemManager.getCustomers(FIRST_NAME, LAST_NAME));
 		
 		verify(customerRegistryService, times(1)).getCustomers(FIRST_NAME, LAST_NAME);
+	}
+	
+	@Test
+	void testGetCustomerByID() throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
+		when(customerRegistryService.getCustomer(CUSTOMERID)).thenReturn(CUSTOMER1);
+		
+		assertEquals(CUSTOMER1, bankSystemManager.getCustomer(CUSTOMERID));
+		
+		verify(customerRegistryService, times(1)).getCustomer(CUSTOMERID);
 	}
 	
 	@ParameterizedTest

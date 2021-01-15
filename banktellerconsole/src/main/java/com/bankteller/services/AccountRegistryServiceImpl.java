@@ -45,7 +45,7 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 			return accountDAO.add(customer, account);
 			
 		} catch (SQLException e) {
-			throw new DataAccessException("The database failed to add the account.");
+			throw new DataAccessException("The database failed to process the request.");
 		}
 	}
 
@@ -63,11 +63,11 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 			final List<Transaction> transactions = transactionDAO.getTransactions(account);
 			
 			
-			return addTransactionsToAccount(account, transactions);
+			return addRetrievedTransactionsToAccount(account, transactions);
 				
 			
 		} catch (SQLException e) {
-			throw new DataAccessException("The database failed to fetch the account.");
+			throw new DataAccessException("The database failed to process the request.");
 		}
 	}
 
@@ -77,12 +77,12 @@ public class AccountRegistryServiceImpl implements AccountRegistryService{
 		try {
 			accountDAO.updateBalance(account);
 		} catch (SQLException e) {
-			throw new DataAccessException("The database failed to update the account.");
+			throw new DataAccessException("The database failed to process the request.");
 		}		
 	}
 	
 	
-	private Account addTransactionsToAccount(final Account account, final List<Transaction> transactions) {
+	private Account addRetrievedTransactionsToAccount(final Account account, final List<Transaction> transactions) {
 		for(final Transaction transaction : transactions) {
 			account.addTransaction(transaction);
 		}

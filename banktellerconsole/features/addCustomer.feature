@@ -13,7 +13,7 @@ Feature: Add A Customer
     And The user entered PPS "<pps>",
    	And The user entered address "<address>"
     Then The customer details are saved to the database  
-    And The teller is shown the message "The new customer has been added".
+    And The teller is shown the message "The new customer <firstName>  <lastName> has been added".
   
   
   Examples: 

@@ -40,7 +40,7 @@ public abstract class TransactionService {
 		try {
 			transactionDAO.add(transaction, account);
 		} catch (SQLException e) {
-			throw new DataAccessException("Transaction Failed: The database failed to store the transaction");
+			throw new DataAccessException("The database failed to process the request.");
 		}
 	}
 }

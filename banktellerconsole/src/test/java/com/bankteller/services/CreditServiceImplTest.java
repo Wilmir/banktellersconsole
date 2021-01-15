@@ -75,7 +75,7 @@ public class CreditServiceImplTest {
 		
 		final Throwable exception = assertThrows(DataAccessException.class, () -> creditService.credit(ACCOUNT_NUMBER, DEPOSIT_AMOUNT));
 		
-		assertEquals("Transaction Failed: The database failed to store the transaction", exception.getMessage());
+		assertEquals("The database failed to process the request.", exception.getMessage());
 		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(accountRegistryService, times(1)).update(account);
 		verify(transactionDAO, times(1)).add(isA(Transaction.class), isA(Account.class));
