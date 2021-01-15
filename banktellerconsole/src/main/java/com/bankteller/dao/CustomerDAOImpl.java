@@ -18,7 +18,7 @@ public class CustomerDAOImpl implements CustomerDAO{
 			GET_CUSTOMERS_QUERY = "SELECT * FROM customers",
 			GET_A_SINGLE_CUSTOMER_BY_PPSNUMBER = "SELECT * FROM customers WHERE ppsNumber = ",
 			GET_A_SINGLE_CUSTOMER_BY_ID = "SELECT * FROM customers WHERE id = ",
-			GET_A_SINGLE_CUSTOMER_BY_NAMEQUERY = "SELECT * FROM customers WHERE firstName = (?) AND lastName = (?)",
+			GET_A_SINGLE_CUSTOMER_BY_NAMEQUERY = "SELECT * FROM customers WHERE LOWER(firstName) = (?) AND LOWER(lastName) = (?)",
 			DELETE_ALL_QUERY = "DELETE FROM customers";
 	
 	public CustomerDAOImpl(final Database database) {
@@ -28,7 +28,6 @@ public class CustomerDAOImpl implements CustomerDAO{
 	@Override
 	public Customer add(final Customer customer) throws SQLException{
 		final PreparedStatement preparedStatement = prepareStatement(ADD_CUSTOMER_QUERY);
-		ResultSet resultSet = null;
 		try {
 			preparedStatement.setString(1, customer.getFirstName());
 			preparedStatement.setString(2, customer.getLastName());
@@ -39,29 +38,62 @@ public class CustomerDAOImpl implements CustomerDAO{
 			
 			
 			Customer newCustomer = null;
-			resultSet = preparedStatement.getGeneratedKeys();	
-			if(resultSet.next()) {
-				final int customerID = resultSet.getInt(1);
-				newCustomer = getCustomerByID(customerID);
-			}
-			return newCustomer;
+			ResultSet resultSet = preparedStatement.getGeneratedKeys();	
 			
+			try {
+				if(resultSet.next()) {
+					final int customerID = resultSet.getInt(1);
+					newCustomer = getCustomerByID(customerID);
+				}
+				return newCustomer;
+			}finally {
+				resultSet.close();
+			}
+
 		}finally {
-			resultSet.close();
 			preparedStatement.close();
 		}
 	}
-	
 	
 	@Override
 	public Customer getCustomerByPPSNumber(final String ppsNumber) throws SQLException {
 		return getCustomerQuery(GET_A_SINGLE_CUSTOMER_BY_PPSNUMBER + ppsNumber.trim());
 	}
 
-	
 	@Override
 	public Customer getCustomerByID(final int customerID) throws SQLException {
 		return getCustomerQuery(GET_A_SINGLE_CUSTOMER_BY_ID + customerID);
+	}
+	
+
+	@Override
+	public List<Customer> getCustomers(final String firstName, final String lastName) throws SQLException {
+		final PreparedStatement preparedStatement = prepareStatement(GET_A_SINGLE_CUSTOMER_BY_NAMEQUERY);
+
+		try {
+			preparedStatement.setString(1, firstName.toLowerCase().trim());
+			preparedStatement.setString(2, lastName.toLowerCase().trim());
+
+			final ResultSet resultSet = preparedStatement.executeQuery();
+			
+			final List<Customer> customers = new ArrayList<>();
+			
+			try {
+				
+				while(resultSet.next()) {
+					customers.add(extractCustomer(resultSet));
+				}
+				
+				return customers;
+				
+			}finally {
+				resultSet.close();
+			}
+			
+		}finally {
+			preparedStatement.close();
+		}
+
 	}
 	
 	
@@ -81,7 +113,6 @@ public class CustomerDAOImpl implements CustomerDAO{
 			preparedStatement.close();
 		}
 	}
-
 	
 	@Override
 	public void deleteAll() throws SQLException {
@@ -92,14 +123,6 @@ public class CustomerDAOImpl implements CustomerDAO{
 			preparedStatement.close();
 		}
 	}
-
-
-	@Override
-	public void update(final Customer customer) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 	private Customer getCustomerQuery(final String query) throws SQLException {
 		final Statement preparedStatement = createStatement();
@@ -141,5 +164,6 @@ public class CustomerDAOImpl implements CustomerDAO{
 	private PreparedStatement prepareStatement(final String query) throws SQLException {
 		return database.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 	}
+
 	
 }
