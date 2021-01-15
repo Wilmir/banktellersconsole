@@ -32,6 +32,4 @@ public class ServiceFactoryImpl implements ServiceAbstractFactory{
 		return new DebitServiceImpl(daoFactory, getAccountRegistryService());
 	}
 
-
-	
 }

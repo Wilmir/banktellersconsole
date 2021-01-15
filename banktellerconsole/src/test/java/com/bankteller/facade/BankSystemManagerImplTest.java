@@ -1,15 +1,22 @@
 package com.bankteller.facade;
 
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.bankteller.entities.Customer;
 import com.bankteller.exceptions.AccountNotFoundException;
 import com.bankteller.exceptions.CustomerAlreadyExistsException;
 import com.bankteller.exceptions.CustomerDoesNotExistException;
@@ -60,6 +67,19 @@ class BankSystemManagerImplTest {
 		verify(customerRegistryService, times(1)).add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
 	}
 	
+	
+	@Test
+	void testGetCustomersByName() throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
+		final List<Customer> customers = new ArrayList<>();
+		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+		customers.add(customer);
+		
+		when(customerRegistryService.getCustomers(FIRST_NAME, LAST_NAME)).thenReturn(customers);
+		
+		assertEquals(customers, bankSystemManager.getCustomers(FIRST_NAME, LAST_NAME));
+		
+		verify(customerRegistryService, times(1)).getCustomers(FIRST_NAME, LAST_NAME);
+	}
 	
 	@ParameterizedTest
 	@ValueSource(strings = {CREDIT_ACCOUNT_TYPE, SAVINGS_ACOUNT_TYPE})

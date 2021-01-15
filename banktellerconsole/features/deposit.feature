@@ -26,7 +26,7 @@ Feature: Deposit Amount
 
     Examples: 
       | accountNumber  | amount | 
-      | 88888888       | 100.3  | 
+      | 12345678       | 100.3  | 
       
       
   Scenario: Unsuccessful Deposit of Negative or Literal Amount
@@ -39,7 +39,7 @@ Feature: Deposit Amount
 
     Examples: 
       | accountNumber  | amount | 
-      | 88888888       | -100.3 | 
+      | 12345678       | -100.3 | 
       | 12345678       | 1M     | 
       
       

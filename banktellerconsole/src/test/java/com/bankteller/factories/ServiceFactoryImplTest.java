@@ -42,5 +42,6 @@ class ServiceFactoryImplTest {
 	void testGetDebitTransactionService(){
 		assertTrue(serviceFactory.getDebitService() instanceof DebitServiceImpl);
 	}
+	
 
 }

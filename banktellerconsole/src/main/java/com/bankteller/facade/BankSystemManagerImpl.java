@@ -1,6 +1,7 @@
 package com.bankteller.facade;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.bankteller.entities.Account;
 import com.bankteller.entities.Customer;
@@ -37,6 +38,10 @@ public class BankSystemManagerImpl implements BankSystemManager{
 		return customerRegistryService.add(firstName, lastName, dateOfBirth, ppsNumber, address);
 	}
 
+	@Override
+	public List<Customer> getCustomers(String firstName, String lastName) throws DataAccessException {
+		return customerRegistryService.getCustomers(firstName, lastName);
+	}
 	
 	@Override
 	public Account addAccount(final String ppsNumber, final String accountType)
@@ -56,4 +61,6 @@ public class BankSystemManagerImpl implements BankSystemManager{
 			AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		debitService.debit(accountNumber, amount);
 	}
+
+
 }

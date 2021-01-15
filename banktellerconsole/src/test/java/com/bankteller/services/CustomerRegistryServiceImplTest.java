@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,6 +63,31 @@ class CustomerRegistryServiceImplTest {
 		final Throwable exception = assertThrows(DataAccessException.class, () -> customerRegistryService.add(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS));
 	
 		assertEquals("The database failed to add the customer.", exception.getMessage());
+	}
+	
+	
+	@Test
+	void testSuccessfulRetrievalOfCustomersByName() throws SQLException, DataAccessException{
+		final List<Customer> customers = new ArrayList<>();
+		final Customer customer = new Customer(FIRST_NAME, LAST_NAME, DATE_OF_BIRTH, PPS_NUMBER, ADDRESS);
+		customers.add(customer);
+		
+		when(customerDAO.getCustomers(FIRST_NAME, LAST_NAME)).thenReturn(customers);
+		
+		assertEquals(customers, customerRegistryService.getCustomers(FIRST_NAME, LAST_NAME));
+		verify(customerDAO, times(1)).getCustomers(FIRST_NAME, LAST_NAME);
+	}
+	
+	
+	@Test
+	void testUnSuccessfulRetrievalOfCustomersByNameDueToSQLError() throws SQLException, DataAccessException{		
+		when(customerDAO.getCustomers(FIRST_NAME, LAST_NAME)).thenThrow(SQLException.class);
+		
+		final Throwable exception = assertThrows(DataAccessException.class, () -> customerRegistryService.getCustomers(FIRST_NAME, LAST_NAME));
+		
+		assertEquals("The database failed to process the request.", exception.getMessage());
+		
+		verify(customerDAO, times(1)).getCustomers(FIRST_NAME, LAST_NAME);
 	}
 
 }

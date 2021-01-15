@@ -2,6 +2,7 @@ package com.bankteller.services;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.bankteller.dao.CustomerDAO;
 import com.bankteller.dao.DAOAbstractFactory;
@@ -35,10 +36,12 @@ public class CustomerRegistryServiceImpl implements CustomerRegistryService{
 
 	}
 
-
-
-
-
-	
-	
+	@Override
+	public List<Customer> getCustomers(final String firstName, final String lastName) throws DataAccessException {
+		try {
+			return customerDAO.getCustomers(firstName, lastName);
+		} catch (SQLException e) {
+			throw new DataAccessException("The database failed to process the request.");
+		}
+	}
 }
