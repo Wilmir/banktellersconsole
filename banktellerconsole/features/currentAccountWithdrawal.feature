@@ -38,7 +38,7 @@ Feature: Withdraw Amount from Current Acount
       | 12345678       | 20000.50 | 9980                       | 10000.00             | 20.02            |
   
 
-  Scenario: Unsuccesufl Withdrawal Due to Not Enough Balance
+  Scenario: Unsuccessful Withdrawal Due to Not Enough Balance
 		Given The teller is asked an account number and amount to withdraw
     And The number <accountnumber> is associated with an account
     And The account balance of account is <balance>
@@ -53,7 +53,7 @@ Feature: Withdraw Amount from Current Acount
       | 12345678       | 50.00    | 100              |
       
       
-  Scenario: Unsuccessful Deposit of Negative or Literal Amount
+  Scenario: Unsuccessful Withdrawal of Negative or Literal Amount
     Given The teller is asked an account number and amount to deposit
     And The number <accountnumber> is associated with an account
     When The teller enters the account number <accountnumber>
