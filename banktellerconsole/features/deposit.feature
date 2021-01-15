@@ -1,5 +1,5 @@
 Feature: Deposit Amount
-  As a customer,
+  As a teller,
 	I need to log cash deposits
 	So, the account balance is updated and the credit transaction history can be retrieved later
 

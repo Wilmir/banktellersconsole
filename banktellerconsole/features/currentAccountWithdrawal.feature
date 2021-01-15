@@ -1,6 +1,6 @@
-Feature: Withdraw Amount
-  As a customer,
-	I need to log cash withdrawals
+Feature: Withdraw Amount from Current Acount
+  As a teller,
+	I need to log cash withdrawals in current account
 	So, the account balance is updated and the debit transaction history can be retrieved later
 
   Scenario: Successful Withdrawal
