@@ -29,10 +29,6 @@ public class CreditServiceImpl extends TransactionService implements CreditServi
 		
 		final Account account = retrieveAccount(accountNumber);		
 		
-		if(account == null) {
-			throw new AccountNotFoundException("No account found with this account number: " + accountNumber);
-		}
-		
 		final Transaction transaction = account.deposit(amount);
 		
 		updateCurrentAccountBalance(account, amount);

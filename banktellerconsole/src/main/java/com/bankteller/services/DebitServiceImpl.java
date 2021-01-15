@@ -32,10 +32,6 @@ public class DebitServiceImpl extends TransactionService implements DebitService
 		
 		final Account account = retrieveAccount(accountNumber);		
 		
-		if(account == null) {
-			throw new AccountNotFoundException("No account found with this account number: " + accountNumber);
-		}
-		
 		final Transaction transaction = account.withdraw(amount);
 		
 		updateCurrentAccountBalance(account, amount);

@@ -24,8 +24,12 @@ public abstract class TransactionService {
 	
 	public abstract void execute(int accountNumber, double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException, WithrawalLimitExceededException, NotEnoughBalanceException;
 	
-	Account retrieveAccount(final int accountNumber) throws DataAccessException, AccountNotFoundException {
-		return accountRegistryService.getAccount(accountNumber);
+	Account retrieveAccount(final int accountNumber) throws DataAccessException, AccountNotFoundException{
+		try {
+			return accountRegistryService.getAccount(accountNumber);
+		} catch (AccountNotFoundException e) {
+			throw new AccountNotFoundException(String.valueOf(accountNumber));
+		}
 	}
 	
 	void updateCurrentAccountBalance(final Account account, final double amount) throws DataAccessException {

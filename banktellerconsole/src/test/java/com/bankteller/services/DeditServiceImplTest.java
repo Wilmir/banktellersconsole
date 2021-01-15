@@ -1,6 +1,7 @@
 package com.bankteller.services;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 import java.sql.SQLException;
@@ -87,9 +88,11 @@ public class DeditServiceImplTest {
 	
 	@Test
 	void testUnsuccessfulTransactionDueToInexistentAccount() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {						
+		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenThrow(AccountNotFoundException.class);	
+
 		final Throwable exception = assertThrows(AccountNotFoundException.class, () -> debitService.debit(ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT));
 		
-		assertEquals("No account found with this account number: " + ACCOUNT_NUMBER, exception.getMessage());
+		assertEquals(String.valueOf(ACCOUNT_NUMBER), exception.getMessage());
 		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(accountRegistryService, times(0)).update(anyObject());
 		verify(transactionDAO, times(0)).add(anyObject(), anyObject());
