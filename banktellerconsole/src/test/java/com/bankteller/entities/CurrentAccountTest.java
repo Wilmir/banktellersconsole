@@ -19,7 +19,7 @@ class CurrentAccountTest {
 	}
 	
 	@ParameterizedTest(name = "Same day withdrawals of {1}, and {2} do not exceed the daily limit of 10000.00 and is valid for a balance of {0}")
-	@CsvFileSource(resources = "/withdrawal/current/validWithdrawalAmount.csv", numLinesToSkip = 1)
+	@CsvFileSource(resources = "/accountwithdrawals/current/validWithdrawalAmount.csv", numLinesToSkip = 1)
 	void testSuccessfulWithdrawal(final double balance, final double firstWithdrawalAmount, final double secondWithdrawalAmount, 
 			final double expectedRemainingBalance, final int transactionCount) throws WithrawalLimitExceededException, NotEnoughBalanceException {
 		
@@ -37,7 +37,7 @@ class CurrentAccountTest {
 	}
 	
 	@ParameterizedTest(name = "Same day withdrawals of {1}, and {2} for a current balance of {0} is invalid")
-	@CsvFileSource(resources = "/withdrawal/current/invalidWithdrawalAmountZeroBalance.csv", numLinesToSkip = 1)
+	@CsvFileSource(resources = "/accountwithdrawals/current/invalidWithdrawalAmountZeroBalance.csv", numLinesToSkip = 1)
 	void testUnSuccessfulWithdrawalDueToZeroBalance(final double balance, final double firstWithdrawalAmount, final double secondWithdrawalAmount, 
 			final double expectedRemainingBalance, final int transactionCount) throws WithrawalLimitExceededException, NotEnoughBalanceException {
 		
@@ -55,7 +55,7 @@ class CurrentAccountTest {
 	}
 	
 	@ParameterizedTest(name = "Same day withdrawals of {1}, and {2} exceeds daily limit of 10000.00")
-	@CsvFileSource(resources = "/withdrawal/current/invalidWithdrawalAmountDailyLimit.csv", numLinesToSkip = 1)
+	@CsvFileSource(resources = "/accountwithdrawals/current/invalidWithdrawalAmountDailyLimit.csv", numLinesToSkip = 1)
 	void testUnSuccessfulWithdrawalDueToDailyLimit(final double balance, final double firstWithdrawalAmount, final double secondWithdrawalAmount, 
 			final double expectedRemainingBalance, final int transactionCount) throws WithrawalLimitExceededException, NotEnoughBalanceException {
 		

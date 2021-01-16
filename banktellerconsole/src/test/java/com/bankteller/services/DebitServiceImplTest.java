@@ -20,7 +20,7 @@ import com.bankteller.exceptions.InvalidAmountException;
 import com.bankteller.exceptions.NotEnoughBalanceException;
 import com.bankteller.exceptions.WithrawalLimitExceededException;
 
-public class DeditServiceImplTest {
+public class DebitServiceImplTest {
 	private static final double INITIAL_BALANCE = 30000.00;
 	private static final int ACCOUNT_NUMBER = 8765432;
 	private static final double NEGATIVE_AMOUNT = -3345.76;

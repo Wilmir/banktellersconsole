@@ -1,6 +1,5 @@
 package com.bankteller.entities;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +7,6 @@ public class Customer {
 	private int customerId;
 	private final String firstName;
 	private final String lastName;
-	private LocalDateTime dateOfRegistration;
 	private final String ppsNumber;
 	private final String address;
 	private final List<Account> accounts = new ArrayList<>();
@@ -36,10 +34,6 @@ public class Customer {
 		return lastName;
 	}
 
-	public void setDateOfRegistration(final LocalDateTime dateOfRegistration) {
-		this.dateOfRegistration = dateOfRegistration;
-	}
-
 	public String getPpsNumber() {
 		return ppsNumber;
 	}
@@ -59,8 +53,9 @@ public class Customer {
 	
 	@Override
 	public String toString() {
-		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", dateOfRegistration=" + dateOfRegistration + ", ppsNumber="
-				+ ppsNumber + ", address=" + address + "]";
+		return "CustomerId: " + customerId 
+				+ "\tName: " + firstName + " " + lastName
+				+ "\tAddress: " + address
+				+ "\tPPSNumber: " + ppsNumber;
 	}
 }

@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,10 +143,8 @@ public class CustomerDAOImpl implements CustomerDAO{
 		final String lastName = resultSet.getString("lastName");
 		final String ppsNumber = resultSet.getString("ppsNumber");
 		final String address = resultSet.getString("address");
-		final LocalDateTime dateCreated = resultSet.getObject("dateCreated", LocalDateTime.class);
 		final Customer customer = new Customer(firstName, lastName, ppsNumber, address);
 		customer.setCustomerId(customerID);
-		customer.setDateOfRegistration(dateCreated);
 
 		return customer;
 	}

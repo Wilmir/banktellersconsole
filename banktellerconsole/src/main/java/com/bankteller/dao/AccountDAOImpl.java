@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,7 +137,6 @@ public class AccountDAOImpl implements AccountDAO{
 		
 		account.setAccountNumber(resultSet.getInt("id"));
 		account.setBalance(resultSet.getDouble("balance"));
-		account.setDateCreated(resultSet.getObject("dateCreated", LocalDateTime.class));
 	
 		return account;
 	}

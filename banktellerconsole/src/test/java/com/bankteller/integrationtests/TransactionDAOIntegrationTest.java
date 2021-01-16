@@ -1,4 +1,4 @@
-package com.bankteller.daointegrationtests;
+package com.bankteller.integrationtests;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -2,7 +2,6 @@ package com.bankteller.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,8 +11,7 @@ import com.bankteller.exceptions.WithrawalLimitExceededException;
 
 public abstract class Account {
 	private int accountNumber;
-	private AccountType type;
-	private LocalDateTime dateCreated;
+	private final AccountType type;
 	private double balance;
 	private final List<Transaction> transactions = new ArrayList<>();
 	
@@ -38,19 +36,12 @@ public abstract class Account {
 		return type;
 	}
 
-	public void setType(final AccountType type) {
-		this.type = type;
-	}
 	
 	public int getTypeId() {
 		return type.getId();
 	}
 	
-	public String getTypeName() {
-		return type.name();
-	}
-	
-	
+
 	public double getBalance() {
 	    BigDecimal bigDecimal = BigDecimal.valueOf(balance);
 	    bigDecimal = bigDecimal.setScale(2, RoundingMode.HALF_UP);
@@ -71,14 +62,6 @@ public abstract class Account {
 		Collections.sort(copyOfTransactions, Collections.reverseOrder());
 		
 		return copyOfTransactions;
-	}
-	
-	public LocalDateTime getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(final LocalDateTime dateCreated) {
-		this.dateCreated = dateCreated;
 	}
 
 	Transaction createTransaction(final boolean isDebit, final double amount, final double newBalance) {

@@ -44,19 +44,23 @@ public class BankSystemManagerImpl implements BankSystemManager{
 	
 	@Override
 	public Customer getCustomer(final int customerID) throws DataAccessException, CustomerDoesNotExistException {
-		// TODO Auto-generated method stub
 		return customerRegistryService.getCustomer(customerID);
 	}
 	
 	@Override
 	public Account addAccount(final String ppsNumber, final String accountType)
-			throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException {
+			throws DataAccessException, CustomerDoesNotExistException {
 		return accountRegistryService.add(ppsNumber, accountType);
 	}
 	
 	@Override
+	public Account getAccount(final int accountNumber) throws DataAccessException, AccountNotFoundException {
+		return accountRegistryService.getAccount(accountNumber);
+	}
+	
+	@Override
 	public void credit(final int accountNumber, final double amount)
-			throws InvalidAmountException, DataAccessException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
+			throws InvalidAmountException, DataAccessException, AccountNotFoundException{
 		creditService.credit(accountNumber, amount);
 	}
 
@@ -65,7 +69,6 @@ public class BankSystemManagerImpl implements BankSystemManager{
 			AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		debitService.debit(accountNumber, amount);
 	}
-
 
 
 }

@@ -23,7 +23,7 @@ public class CurrentAccount extends Account{
 		for(final Transaction transaction : this.getTransactions()) {
 			final long duration = ChronoUnit.MINUTES.between(LocalDateTime.now(), transaction.getDateCreated());
 			
-			if(duration < MINUTES_IN_24HOURS) {
+			if(duration < MINUTES_IN_24HOURS && transaction.isDebit()) {
 				transactionTotalin24Hours += transaction.getAmount();
 			}
 		}

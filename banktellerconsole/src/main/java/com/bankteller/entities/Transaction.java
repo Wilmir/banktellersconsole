@@ -38,12 +38,12 @@ public class Transaction implements Comparable<Transaction>{
 
 	@Override
 	public String toString() {
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		final String formattedDate = formatter.format(dateCreated);
 		final String formattedAmount = String.format("%.2f",amount);
 		final String formattedBalance = String.format("%.2f",postTransactionBalance);
 	
-		return formattedDate + "\t" + ( isDebit ? (formattedAmount + "\t\t") : ("\t\t" + formattedAmount)) + "\t\t" + formattedBalance;
+		return formattedDate + "\t\t" + ( isDebit ? (formattedAmount + "\t\t") : ("\t\t" + formattedAmount)) + "\t" + formattedBalance;
 	}
 
 	@Override

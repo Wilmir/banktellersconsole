@@ -20,11 +20,15 @@ public interface BankSystemManager {
 	
 	Customer getCustomer(final int customerID) throws DataAccessException, CustomerDoesNotExistException;
 	
-	Account addAccount(final String ppsNumber, final String accountType) throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException;
+	Account addAccount(final String ppsNumber, final String accountType) throws DataAccessException, CustomerDoesNotExistException;
 
+	Account getAccount(int accountNumber) throws DataAccessException, AccountNotFoundException;
+	
+	
 	void credit(int accountNumber, double amount)
-			throws InvalidAmountException, DataAccessException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException;
+			throws InvalidAmountException, DataAccessException, AccountNotFoundException;
 
 	void debit(int accountNumber, double amount)
 			throws InvalidAmountException, DataAccessException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException;
+
 }
