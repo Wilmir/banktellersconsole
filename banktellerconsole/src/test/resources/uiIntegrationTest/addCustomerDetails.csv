@@ -1,0 +1,3 @@
+﻿firstName,lastName,ppsNumber,address,output
+Wilmir,Nicanor,1234567,Dublin Ireland,The new customer Wilmir Nicanor has been added
+Rhea,Nicanor,9999999,Melbourne Australia,The customer with PPS Number already exists: 9999999

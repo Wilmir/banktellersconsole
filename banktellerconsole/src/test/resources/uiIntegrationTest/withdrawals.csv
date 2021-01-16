@@ -1,0 +1,12 @@
+﻿TEST DATA,,,OTHER BACKGROUND INFORMATION,,
+accountNumber,amount,expectedOutput,AccountType,CurrentBalance,WithrawalAmountDuringTheDay
+99999999,19.99,Successfully withdrawn 19.99 from 99999999,Current,10020.5,9980
+99999998,20,Successfully withdrawn 20.00 from 99999998,Current,10020.5,9980
+99999990,20000.5,Successfully withdrawn 20000.50 from 99999990,Savings,20000.5,N/A
+99999989,20000.49,Successfully withdrawn 20000.49 from 99999989,Savings,20000.5,N/A
+99999997,20.01,The account 99999997 will exceed daily withdrawal limit of 10000.00 euros,Current,10020.5,9980
+99999996,20.02,The account 99999996 will exceed daily withdrawal limit of 10000.00 euros,Current,10020.5,9980
+99999995,50.01,The account 99999995 does not have enough balance,Current,50,0
+99999995,50.02,The account 99999995 does not have enough balance,Current,50,0
+99999999,-100.3,Invalid amount: -100.30,Current,N/A,N/A
+12345678,100,The account does not exist 12345678,Current,N/A,N/A

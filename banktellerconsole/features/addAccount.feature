@@ -9,12 +9,12 @@ Feature: Add An Account
     When The bank teller entered ppsNumber "<pps>",
 		And The bank teller entered the bank account type "<accountType>",
     Then The new account is created
-    And The teller is shown the message "The new " "<accountType>" "account has been added".
+    And The teller is shown the message "The new  <accountType> has been added to customer with pps number.".
   
   Examples: 
-      | pps     | accountType| 
-      | 1234567 | current    |
-      | 1234567 | savings    |
+      | pps     | accountType| accountNumber |
+      | 9999999 | current    |   10000000    |
+      | 9999999 | savings    |   10000001    |
       
       
 
@@ -24,12 +24,12 @@ Feature: Add An Account
     When The bank teller entered ppsNumber "<pps>",
 		And The bank teller entered the bank account type "<accountType>",
     Then The account is not created
-    And The teller is shown the message "The customer with" "<ppsNumber>” "does not exist"
+    And The teller is shown the message "The customer with pps number <ppsNumber> does not exist."
   
   Examples: 
-      | pps    | accountType| 
-      | 999999 | current    |
-      | 999999 | savings    |
+      | pps     | accountType| 
+      | 9999998 | current    |
+      | 9999998 | savings    |
       
       
       

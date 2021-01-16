@@ -16,8 +16,8 @@ Feature: Withdraw Amount from Current Acount
 
     Examples: 
       | accountNumber  | balance  | currentdaywithdrawalamount | dailywithdrawallimit | withdrawalamount | 
-      | 12345678       | 20000.50 | 9980                       | 10000.00             | 19.99            |
-      | 12345678       | 20000.50 | 9980                       | 10000.00             | 20.00            |
+      | 99999999       | 20000.50 | 9980                       | 10000.00             | 19.99            |
+      | 99999998       | 20000.50 | 9980                       | 10000.00             | 20.00            |
 
 
 
@@ -30,12 +30,12 @@ Feature: Withdraw Amount from Current Acount
     And The teller enters the amount <withdrawalamount>
     Then The daily withdrawal limit <dailywithdrawallimit> is exceeded
     And The withdrawal transaction is NOT saved
-    And The message “The account <accountNumber> will exceed daily withdrawal limit of <dailywithdrawallimit> euros <amount>”.
+    And The message “The account <accountNumber> will exceed daily withdrawal limit of <dailywithdrawallimit> euros”.
 
     Examples: 
       | accountNumber  | balance  | currentdaywithdrawalamount | dailywithdrawallimit | withdrawalamount | 
-      | 12345678       | 20000.50 | 9980                       | 10000.00             | 20.01            |
-      | 12345678       | 20000.50 | 9980                       | 10000.00             | 20.02            |
+      | 99999997       | 20000.50 | 9980                       | 10000.00             | 20.01            |
+      | 99999996       | 20000.50 | 9980                       | 10000.00             | 20.02            |
   
 
   Scenario: Unsuccessful Withdrawal Due to Not Enough Balance
@@ -45,12 +45,12 @@ Feature: Withdraw Amount from Current Acount
     When The teller enters the account number <accountnumber>
     And The teller enters the amount <withdrawalamount>
     Then The withdrawal transaction is NOT saved
-    And The message “The account <accountNumber> does not have enough balance <balance>”.
+    And The message “The account <accountNumber> does not have enough balance”.
 
 
     Examples: 
       | accountNumber  | balance  | withdrawalamount | 
-      | 12345678       | 50.00    | 100              |
+      | 99999995       | 50.00    | 100              |
       
       
   Scenario: Unsuccessful Withdrawal of Negative or Literal Amount
@@ -63,8 +63,8 @@ Feature: Withdraw Amount from Current Acount
 
     Examples: 
       | accountNumber  | amount | 
-      | 88888888       | -100.3 | 
-      | 12345678       | 1M     | 
+      | 99999999       | -100.3 | 
+      | 99999999       | 1M     | 
       
       
     

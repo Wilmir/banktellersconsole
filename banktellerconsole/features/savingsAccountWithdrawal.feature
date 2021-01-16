@@ -14,8 +14,8 @@ Feature: Withdraw Amount from Savings Account
 
     Examples: 
       | accountNumber  | balance  | withdrawalamount | 
-      | 12345678       | 20000.50 | 19.99            |
-      | 12345678       | 20000.50 | 20.00            |
+      | 99999990       | 20000.50 | 20000.50         |
+      | 99999989       | 20000.50 | 20000.49         |
 
 
   Scenario: Unsuccessful Withdrawal Due to Not Enough Balance
@@ -30,7 +30,7 @@ Feature: Withdraw Amount from Savings Account
 
     Examples: 
       | accountNumber  | balance  | withdrawalamount | 
-      | 12345678       | 50.00    | 100              |
+      | 99999990       | 50.00    | 100              |
       
       
   Scenario: Unsuccessful Withdrawal of Negative or Literal Amount
@@ -43,8 +43,8 @@ Feature: Withdraw Amount from Savings Account
 
     Examples: 
       | accountNumber  | amount | 
-      | 88888888       | -100.3 | 
-      | 12345678       | 1M     | 
+      | 99999990       | -100.3 | 
+      | 99999990       | 1M     | 
       
       
     

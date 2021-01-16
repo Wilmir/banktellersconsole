@@ -12,7 +12,7 @@ Feature: View All Customer's Accounts
   
   Examples: 
       | customerID    | customerDetails																																								 |
-      | 123456789     | Wilmir Nicanor CustomerID: 123456789 \n AccountNumber: 88888888 SavingsAccount Balance: 999.99 |
+      | 8888888       | Wilmir Nicanor CustomerID: 8888888 \n AccountNumber: 99999985 SavingsAccount Balance: 35.00    |
    
   
  	Scenario: No Customer Detail is Displayed

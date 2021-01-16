@@ -30,7 +30,7 @@ Feature: Add A Customer
  	Scenario: The Account Details Are Not Displayed Due to Invalid AccountNumber
     Given The bank teller is asked to enter the 8 digit account number
     When The bank teller enters the "<accountNumber>"
-    Then Then the message "No account associated with" "<accountNumber>" "exists"
+    Then Then the message "Invalid account number <accountNumber> exists"
 
   Examples: 
       | accountNumber |

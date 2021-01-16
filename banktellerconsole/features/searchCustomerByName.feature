@@ -12,9 +12,10 @@ So, I can quickly check if the customer is registered in the system
     Then The customer <details> are displayed
 
     Examples: 
-      | existingCustomerFirstName  | existingCustomerLastName | searchFirstName  | searchLastName | details                                             | 
-      |           wilmir           |         nicanor          |       WiLmIR     |      nIcANoR   | Wilmir Nicanor  PPSNumber: 1234567 CustomerNumber:1 |
-																																															    | Wilmir Nicanor  PPSNumber: 8888888 CustomerNumber:2 |
+      | existingCustomerFirstName  | existingCustomerLastName | searchFirstName  | searchLastName | details                                                                                 | 
+      |           rhea             |         nicanor          |       RheA       |      nIcANoR   | 2 Customers Found																																		    |
+      																																												    | CustomerID:9999999 Name: Rhea Nicanor Address: Melbourne Australia PPSNumber: 9999999   |
+																																															    | CustomerID:9999998 Name: Rhea Nicanor Address: Dublin Ireland PPSNumber: 8888888        |                |
 
   Scenario: UnSuccessful Match of Existing Customers
     Given The teller is asked for the firstName and lastName of the customer

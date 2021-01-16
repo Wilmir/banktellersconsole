@@ -1,0 +1,5 @@
+﻿accountNumber,amount,expectedOutput
+99999987,0.01,Successfully deposited 0.01 to 99999987
+99999987,0.02,Successfully deposited 0.02 to 99999987
+12345678,100,The account does not exist 12345678
+99999987,-100.3,Invalid amount: -100.30

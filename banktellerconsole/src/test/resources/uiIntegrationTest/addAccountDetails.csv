@@ -1,0 +1,7 @@
+﻿ppsNumber,accountType,output
+9999999,saver,Invalid account type saver
+9999999,curry,Invalid account type curry
+9999998,current,The customer with pps number 9999998 does not exist.
+9999998,savings,The customer with pps number 9999998 does not exist.
+9999999,current,The new current account has been added to customer with pps number: 9999999.
+9999999,savings,The new savings account has been added to customer with pps number: 9999999.

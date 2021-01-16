@@ -1,0 +1,12 @@
+﻿customerID,output
+8888888,"CustomerId: 8888888	Name: Wilmir Nicanor	Address: Athlone Ireland	PPSNumber: 6868656
+
+2 accounts found.
+SAVINGS ACCOUNT # : 99999984		BALANCE: 67676.50
+CURRENT ACCOUNT # : 99999985		BALANCE: 35.00"
+1234567,The customer with ID 1234567 does not exist.
+7777777,"CustomerId: 7777777	Name: Jhon Nicanor	Address: Dublin Ireland	PPSNumber: 6868656
+
+1 account found.
+CURRENT ACCOUNT # : 99999983		BALANCE: 35.00"
+6666666,"CustomerId: 6666666	Name: Myrna Nicanor	Address: Dublin Ireland	PPSNumber: 5764536"

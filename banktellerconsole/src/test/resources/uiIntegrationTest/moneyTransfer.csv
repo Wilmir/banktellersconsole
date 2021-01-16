@@ -1,0 +1,11 @@
+﻿sendersAccountNumber,receiversAccountNumber,transferAmount,expectedOutput
+99999994,99999999,19.99,"Successfully withdrawn 19.99 from 99999994
+Successfully deposited 19.99 to 99999999"
+99999993,99999999,20,"Successfully withdrawn 20.00 from 99999993
+Successfully deposited 20.00 to 99999999"
+99999992,99999999,20.01,The account 99999992 will exceed daily withdrawal limit of 10000.00 euros
+99999992,99999999,20.02,The account 99999992 will exceed daily withdrawal limit of 10000.00 euros
+99999991,99999999,50.01,The account 99999991 does not have enough balance
+99999991,99999999,50.02,The account 99999991 does not have enough balance
+99999991,12345678,50,The account does not exist 12345678
+99999994,99999999,-50,Invalid amount: -50.00

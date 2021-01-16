@@ -13,7 +13,9 @@ Feature: Deposit Amount
 
     Examples: 
       | accountNumber  | amount | 
-      | 12345678       | 100.3  | 
+      | 99999990       | 0.01   | 
+      | 99999990       | 0.02   | 
+      
 
 
   Scenario: Unsuccesufl Deposit for Inexistent Account
@@ -22,7 +24,7 @@ Feature: Deposit Amount
     When The teller enters the account number <accountnumber>
     And The teller enters the amount <amount>
     Then The deposit transaction is not saved
-    And The message “No account found with this <accountNumber>”
+    And The message "The account does not exist  <accountNumber>”
 
     Examples: 
       | accountNumber  | amount | 
@@ -39,8 +41,8 @@ Feature: Deposit Amount
 
     Examples: 
       | accountNumber  | amount | 
-      | 12345678       | -100.3 | 
-      | 12345678       | 1M     | 
+      | 99999990       | -100.3 | 
+      | 99999990       | 1M     | 
       
       
     

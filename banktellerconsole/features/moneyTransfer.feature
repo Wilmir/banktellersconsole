@@ -14,12 +14,14 @@ Feature: Money Transfer
     Then The daily withdrawal limit <dailywithdrawallimit> is NOT exceeded
     And The debit transaction is added in <senderaccountnumber>
     And The credit transaction is added in <receiveraccountnumber>
-    And The message “Successfully transfered <transferamount> from <senderaccountnumber> to <receiveraccountnumber>” is displayed
+    And The message “Successfully withdrawn <transferamount> from <senderaccountnumber> ” is displayed
+    And The message “Successfully deposited <transferamount> to <receiveraccountnumber>” is displayed
+
 
     Examples: 
       | senderaccountNumber | receiveraccountNumber | balance  | currentdaywithdrawalamount | dailywithdrawallimit | transferamount | 
-      | 12345678            | 99999999              | 20000.50 | 9980                       | 10000.00             | 19.99          |
-      | 12345678            | 99999999              | 20000.50 | 9980                       | 10000.00             | 20.00          |
+      | 99999994            | 99999999              | 20000.00 | 9980                       | 10000.00             | 19.99          |
+      | 99999993            | 99999999              | 20000.00 | 9980                       | 10000.00             | 20.00          |
 
 
 
@@ -34,12 +36,12 @@ Feature: Money Transfer
     Then The daily withdrawal limit <dailywithdrawallimit> is exceeded
     And The debit transaction is NOT added in <senderaccountnumber>
     And The credit transaction is NOT added in <receiveraccountnumber>
-    And The message “Unsuccessful Transaction: The account <senderaccountNumber> will exceed daily withdrawal limit of <dailywithdrawallimit> euros <amount>” is displayed
+    And The message “The account <senderaccountNumber> will exceed daily withdrawal limit of <dailywithdrawallimit> euros <amount>” is displayed
 
     Examples: 
       | senderaccountNumber | receiveraccountNumber | balance  | currentdaywithdrawalamount | dailywithdrawallimit | transferamount | 
-      | 12345678            | 99999999              | 20000.50 | 9980                       | 10000.00             | 20.01          |
-      | 12345678            | 99999999              | 20000.50 | 9980                       | 10000.00             | 20.01          |
+      | 99999992            | 99999999              | 20000.50 | 9980                       | 10000.00             | 20.01          |
+      | 99999992            | 99999999              | 20000.50 | 9980                       | 10000.00             | 20.02          |
     
 
   Scenario: Unsuccessful Transfer Due to Sender Not Having Enough Balance
@@ -51,13 +53,13 @@ Feature: Money Transfer
     And The teller enters the amount <transferamount>
     Then The debit transaction is NOT added in <senderaccountnumber>
     And The credit transaction is NOT added in <receiveraccountnumber>
-    And The message “Unsuccessful Transaction: The account <senderaccountnumber> does not have enough balance <balance>” is displayed
+    And The message “The account <senderaccountnumber> does not have enough balance <balance>” is displayed
 
 
     Examples: 
       | senderaccountNumber | receiveraccountNumber | balance  | transferamount | 
-      | 12345678            | 99999999              | 50.00    | 50.01          |
-      | 12345678            | 99999999              | 50.00    | 50.02          |
+      | 99999991            | 99999999              | 50.00    | 50.01          |
+      | 99999991            | 99999999              | 50.00    | 50.02          |
 
       
       
@@ -71,7 +73,7 @@ Feature: Money Transfer
 
     Examples: 
       | senderaccountNumber | receiveraccountNumber | balance  | transferamount | 
-      | 12345678            | 99999999              | 50.00    | -50.00         |
-      | 12345678            | 99999999              | 50.00    | 50M            |
+      | 99999994            | 99999999              | 50.00    | -50.00         |
+      | 99999994            | 99999999              | 50.00    | 50M            |
       
     

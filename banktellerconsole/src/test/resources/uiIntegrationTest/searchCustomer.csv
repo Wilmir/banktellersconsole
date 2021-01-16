@@ -1,0 +1,5 @@
+﻿firstName,lastName,output
+rhea,nicanor,"2 customers found
+CustomerId: 9999998	Name: Rhea Nicanor	Address: Dublin Ireland	PPSNumber: 8888888
+CustomerId: 9999999	Name: Rhea Nicanor	Address: Melbourne Australia	PPSNumber: 9999999"
+Dan,Schultheis,No customer found
