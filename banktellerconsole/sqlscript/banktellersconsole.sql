@@ -1,0 +1,167 @@
+# This script creates 2 database
+# 1. consolebanking - for manualtest
+# 2. uiintegrationtest_bankteller - for integration test
+
+##########################################
+##########################################
+DROP DATABASE IF EXISTS consolebanking;
+CREATE DATABASE IF NOT EXISTS consolebanking;
+
+USE consolebanking;
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS customers;
+
+CREATE TABLE IF NOT EXISTS customers (
+	id int NOT NULL AUTO_INCREMENT,
+	firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+	ppsNumber VARCHAR(7) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    dateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (id),
+	UNIQUE KEY customer_unq (id)
+);
+
+CREATE TABLE IF NOT EXISTS accounts (
+	id int NOT NULL AUTO_INCREMENT,
+    type int NOT NULL,
+	customerID INT NOT NULL,
+    dateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    balance decimal(11,2) NOT NULL DEFAULT 0.00,
+	PRIMARY KEY (id),
+	FOREIGN KEY (customerID)
+		 REFERENCES customers(id) ON DELETE CASCADE,
+	UNIQUE KEY account_unq (id)
+);
+
+
+CREATE TABLE IF NOT EXISTS transactions (
+	id INT NOT NULL AUTO_INCREMENT,
+    accountID INT NOT NULL ,
+    isDebit BOOLEAN NOT NULL,
+    dateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    amount decimal(11,2) NOT NULL,
+	postTransactionBalance decimal(11,2) NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (accountID)
+		 REFERENCES accounts(id) ON DELETE CASCADE,
+	UNIQUE KEY transactions_unq (id)
+);
+
+ALTER TABLE accounts AUTO_INCREMENT = 10000000;
+ALTER TABLE transactions AUTO_INCREMENT = 100000000;
+
+###################################################################
+DROP DATABASE IF EXISTS uiintegrationtest_bankteller;
+CREATE DATABASE IF NOT EXISTS uiintegrationtest_bankteller;
+
+USE uiintegrationtest_bankteller;
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS customers;
+
+CREATE TABLE IF NOT EXISTS customers (
+	id int NOT NULL AUTO_INCREMENT,
+	firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+	ppsNumber VARCHAR(7) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    dateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (id),
+	UNIQUE KEY customer_unq (id)
+);
+
+CREATE TABLE IF NOT EXISTS accounts (
+	id int NOT NULL AUTO_INCREMENT,
+    type int NOT NULL,
+	customerID INT NOT NULL,
+    dateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    balance decimal(11,2) NOT NULL DEFAULT 0.00,
+	PRIMARY KEY (id),
+	FOREIGN KEY (customerID)
+		 REFERENCES customers(id) ON DELETE CASCADE,
+	UNIQUE KEY account_unq (id)
+);
+
+
+CREATE TABLE IF NOT EXISTS transactions (
+	id INT NOT NULL AUTO_INCREMENT,
+    accountID INT NOT NULL ,
+    isDebit BOOLEAN NOT NULL,
+    dateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    amount decimal(11,2) NOT NULL,
+	postTransactionBalance decimal(11,2) NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (accountID)
+		 REFERENCES accounts(id) ON DELETE CASCADE,
+	UNIQUE KEY transactions_unq (id)
+);
+
+ALTER TABLE accounts AUTO_INCREMENT = 10000000;
+ALTER TABLE transactions AUTO_INCREMENT = 100000000;
+
+# INTEGRATION TEST DATA
+INSERT INTO customers VALUES (9999999, "Rhea","Nicanor","9999999","Melbourne Australia", NOW());
+INSERT INTO customers VALUES (9999998, "Rhea","Nicanor","8888888","Dublin Ireland", NOW());
+
+# INTEGRATION TEST DATA FOR WITHDRAWAL
+INSERT INTO accounts VALUES(99999999, 1, 9999999, NOW(), 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999999, FALSE, NOW(), 20000.50, 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999999, TRUE, NOW(), 9980, 10020.50);
+UPDATE accounts SET balance = 10020.5 WHERE id = 99999999;
+
+INSERT INTO accounts VALUES(99999998, 1, 9999999, NOW(), 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999998, FALSE, NOW(), 20000.50, 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999998, TRUE, NOW(), 9980, 10020.50);
+UPDATE accounts SET balance = 10020.5 WHERE id = 99999998;
+
+INSERT INTO accounts VALUES(99999997, 1, 9999999, NOW(), 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999997, FALSE, NOW(), 20000.50, 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999997, TRUE, NOW(), 9980, 10020.50);
+UPDATE accounts SET balance = 10020.5 WHERE id = 99999997;
+
+INSERT INTO accounts VALUES(99999996, 1, 9999999, NOW(), 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999996, FALSE, NOW(), 20000.50, 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999996, TRUE, NOW(), 9980, 10020.50);
+UPDATE accounts SET balance = 10020.5 WHERE id = 99999996;
+
+INSERT INTO accounts VALUES(99999995, 1, 9999999, NOW(), 50.00);
+
+INSERT INTO accounts VALUES(99999990, 2, 9999999, NOW(), 20000.50);
+INSERT INTO accounts VALUES(99999989, 2, 9999999, NOW(), 20000.50);
+
+
+#INTEGRATION TEST DATA FOR MONEY TRANSFER
+INSERT INTO accounts VALUES(99999994, 1, 9999999, NOW(), 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999994, FALSE, NOW(), 20000.50, 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999994, TRUE, NOW(), 9980, 10020);
+UPDATE accounts SET balance = 10020.5 WHERE id = 99999994;
+
+INSERT INTO accounts VALUES(99999993, 1, 9999999, NOW(), 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999993, FALSE, NOW(), 20000.50, 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999993, TRUE, NOW(), 9980, 10020);
+UPDATE accounts SET balance = 10020.5 WHERE id = 99999993;
+
+INSERT INTO accounts VALUES(99999992, 1, 9999999, NOW(), 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999992, FALSE, NOW(), 20000.50, 20000.50);
+INSERT INTO transactions VALUES(NULL, 99999992, TRUE, NOW(), 9980, 10020);
+UPDATE accounts SET balance = 10020.5 WHERE id = 99999992;
+
+INSERT INTO accounts VALUES(99999991, 1, 9999999, NOW(), 50.00);
+
+#INTEGRATION TEST DATA FOR DEPOSIT
+INSERT INTO accounts VALUES(99999987, 2, 9999999, NOW(), 0.00);
+
+#INTEGRATION TEST DATA FOR VIEW ACCOUNT
+INSERT INTO accounts VALUES(99999986, 1, 9999999, NOW(), 0.00);
+
+#INTEGRATION TEST DATA FOR VIEW CUSTOMER
+INSERT INTO customers VALUES (8888888, "Wilmir","Nicanor","6868656","Athlone Ireland", NOW());
+INSERT INTO accounts VALUES(99999985, 1, 8888888, NOW(), 35.00);
+INSERT INTO accounts VALUES(99999984, 2, 8888888, NOW(), 67676.50);
+
+INSERT INTO customers VALUES (7777777, "Jhon","Nicanor","6868656","Dublin Ireland", NOW());
+INSERT INTO accounts VALUES(99999983, 1, 7777777, NOW(), 35.00);
+
+INSERT INTO customers VALUES (6666666, "Myrna","Nicanor","5764536","Dublin Ireland", NOW());
