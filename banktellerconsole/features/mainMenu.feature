@@ -55,5 +55,11 @@ Feature: Main Menu for Teller
  
   Scenario: Money Transer Menu
     Given The teller is asked to select from menu items in the main menu
-    When The teller enters "deposit" 
+    When The teller enters "transfer" 
     Then The teller is shown the instructions to enter the sender and receivers 8 digit account number, and the amount to transfer
+  
+  
+ 	Scenario: Unrecognized Selection
+    Given The teller is asked to select from menu items in the main menu
+    When The teller enters an unrecognized selection "gy47sf" 
+    Then The teller is shown "Error! Not a valid command.\n"

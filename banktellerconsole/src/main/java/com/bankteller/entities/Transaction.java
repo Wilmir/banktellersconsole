@@ -43,7 +43,7 @@ public class Transaction implements Comparable<Transaction>{
 		final String formattedAmount = String.format("%.2f",amount);
 		final String formattedBalance = String.format("%.2f",postTransactionBalance);
 	
-		return formattedDate + "\t\t" + ( isDebit ? (formattedAmount + "\t\t") : ("\t\t" + formattedAmount)) + "\t" + formattedBalance;
+		return formattedDate + "\t\t" + ( isDebit ? (formattedAmount + "\t\t") : ("\t\t" + formattedAmount)) + "\t\t" + formattedBalance;
 	}
 
 	@Override

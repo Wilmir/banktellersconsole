@@ -20,7 +20,7 @@ import com.bankteller.dao.UIIntegrationDatabaseImpl;
 import com.bankteller.facade.BankSystemManager;
 import com.bankteller.facade.BankSystemManagerImpl;
 import com.bankteller.services.ServiceFactoryImpl;
-import com.bankteller.ui.BankConsoleUI;
+import com.bankteller.ui.ConsoleUI;
 
 /* This tests the integration of the UI with the BankSystemFacade
  * The test data for existing customers, accounts, and transactions are in the test database
@@ -30,7 +30,7 @@ import com.bankteller.ui.BankConsoleUI;
 class UserInterfaceIntegrationTest {
 	private BankSystemManager bankSystemManager;
 	private final static Database database = new UIIntegrationDatabaseImpl();
-	private BankConsoleUI bankUI;
+	private ConsoleUI bankUI;
 	
 	@BeforeAll
 	static void connectToDB() throws ClassNotFoundException, SQLException {
@@ -47,7 +47,7 @@ class UserInterfaceIntegrationTest {
 	@BeforeEach
 	void setUp() {		
 		bankSystemManager = new BankSystemManagerImpl(new ServiceFactoryImpl(new DAOFactoryImpl(database)));		
-		bankUI = new BankConsoleUI(bankSystemManager);
+		bankUI = new ConsoleUI(bankSystemManager);
 	}	
 	
 	

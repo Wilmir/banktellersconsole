@@ -72,7 +72,7 @@ public abstract class Account {
 	
 	double updateBalance(final double amount) {
 		this.setBalance(balance + amount);
-		return balance + amount;
+		return balance;
 	}
 	
 	@Override

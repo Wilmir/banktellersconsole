@@ -33,6 +33,8 @@ class SavingsAccountTest {
 
 		assertEquals(firstWithdrawalAmount, transaction1.getAmount());
 		assertEquals(secondWithdrawalAmount, transaction2.getAmount());
+		assertEquals(account.getBalance(), transaction2.getPostTransactionBalance(), 0.001);
+
 
 	}
 	

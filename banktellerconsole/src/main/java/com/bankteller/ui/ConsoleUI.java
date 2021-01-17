@@ -1,5 +1,6 @@
 package com.bankteller.ui;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,12 +16,90 @@ import com.bankteller.exceptions.NotEnoughBalanceException;
 import com.bankteller.exceptions.WithrawalLimitExceededException;
 import com.bankteller.facade.BankSystemManager;
 
-public class BankConsoleUI {
+public class ConsoleUI {
 	private final BankSystemManager bankSystemManager;
 
-	public BankConsoleUI(final BankSystemManager bankSystemManager) {
+	public ConsoleUI(final BankSystemManager bankSystemManager) {
 		this.bankSystemManager = bankSystemManager;
 	}
+	
+	public void run(final Scanner scanner) {
+        System.out.println("Welcome to the Bank Teller's Console Application\n");
+
+		displayMainMenu();
+		
+		String action = "";
+		while (!action.equalsIgnoreCase("exit")) {
+			
+			action = ValidationHelper.getString(scanner, "Enter a command: ");
+			System.out.println();
+
+			if(matchesMenuItem(action)) {
+				System.out.println("\n\n\n\n" + executeMenuItem(action, scanner) + "\n");
+				
+			}else if(action.equalsIgnoreCase("exit")) {
+				System.out.println("\n\n\n\nThank you and Good bye!\n");
+				
+			}else {
+				System.out.println("\n\n\n\nError! Not a valid command.\n");
+				
+			}
+				
+			displayMainMenu();
+		}
+			
+	}
+	
+	
+	public String executeMenuItem(final String action, final Scanner scanner) {
+		if(action.equalsIgnoreCase("create")) {
+			return addCustomer(scanner);
+			
+		}else if(action.equalsIgnoreCase("search")) {
+			return searchCustomerByName(scanner);
+			
+		}else if(action.equalsIgnoreCase("viewcustomer")) {
+			return getCustomerByID(scanner);
+			
+		}else if(action.equalsIgnoreCase("openaccount")) {
+			return openAccount(scanner);
+			
+		}else if(action.equalsIgnoreCase("viewaccount")) {
+			return viewAccount(scanner);
+			
+		}else if(action.equalsIgnoreCase("withdraw")) {
+			return withdraw(scanner);
+			
+		}else if(action.equalsIgnoreCase("deposit")) {
+			return deposit(scanner);
+			
+		}else {
+			return transferMoney(scanner);	
+		}
+	}
+
+	
+	private boolean matchesMenuItem(final String action) {
+		final List<String> menuItems = Arrays.asList(new String[]{"create","search", "viewcustomer", "openaccount", "viewaccount", "withdraw", "deposit", "transfer"});		
+		return menuItems.contains(action.toLowerCase());	
+	}
+	
+	
+	private void displayMainMenu()
+    {
+        System.out.println("COMMAND MENU");
+        System.out.println("create 		- Register A Customer");
+        System.out.println("search    	- Search Customers By Name");
+        System.out.println("viewcustomer    - View A Customer");
+        System.out.println("openaccount    	- Open An Account");
+        System.out.println("viewaccount     - View An Account");
+        System.out.println("withdraw    	- Log Withdrawals");
+        System.out.println("deposit    	- Log Deposit");
+        System.out.println("transfer    	- Log Money Transfer");
+        System.out.println("exit	    	- Exit this application\n");
+    }
+	
+	
 	
 	public String addCustomer(final Scanner scanner) {
 		final String firstName = ValidationHelper.getLine(scanner, "Enter the customer's first name: ");
@@ -30,12 +109,14 @@ public class BankConsoleUI {
 		
 		try {
 			bankSystemManager.addCustomer(firstName, lastName, ppsNumber, address);
-			
 			return "The new customer " + firstName + " " +  lastName + " has been added";
+			
 		} catch (DataAccessException e) {
 			return "The bank system encountered an error.";
+			
 		} catch (CustomerAlreadyExistsException e) {
 			return "The customer with PPS Number already exists: " 	+ ppsNumber;
+			
 		}
 	}
 	
@@ -88,8 +169,10 @@ public class BankConsoleUI {
 			
 		} catch (DataAccessException e) {
 			return "The bank system encountered an error.";
+			
 		} catch (CustomerDoesNotExistException e) {
 			return "The customer with ID " + customerID + " does not exist.";
+			
 		}
 		
 	}
@@ -108,10 +191,13 @@ public class BankConsoleUI {
 		try {
 			bankSystemManager.addAccount(ppsNumber, accountType);
 			return "The new " + accountType + " account has been added to customer with pps number: " + ppsNumber + ".";
+			
 		} catch (DataAccessException e) {
 			return "The bank system encountered an error.";
+			
 		} catch (CustomerDoesNotExistException e) {
 			return "The customer with pps number " + ppsNumber + " does not exist.";
+			
 		}
 	}
 	
@@ -139,8 +225,10 @@ public class BankConsoleUI {
 			
 		} catch (DataAccessException e) {
 			return "The bank system encountered an error.";
+			
 		} catch (AccountNotFoundException e) {
 			return "The account does not exist " + accountNumber;
+			
 		}
 		
 	}
@@ -185,9 +273,11 @@ public class BankConsoleUI {
 			
 			if(creditStatus.equals("Successfully deposited " + formattedAmount + " to " + receiversAccountNumber)) {
 				return debitStatus + "\n" + creditStatus;
+				
 			}else {
 				credit(sendersAccountNumber, amount, formattedAmount);
 				return creditStatus;
+				
 			}
 		}else {
 			return debitStatus;
