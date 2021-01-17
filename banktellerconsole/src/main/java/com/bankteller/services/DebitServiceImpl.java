@@ -26,7 +26,7 @@ public class DebitServiceImpl extends TransactionService implements DebitService
 	
 	@Override
 	public void execute(final int accountNumber, final double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException, WithrawalLimitExceededException, NotEnoughBalanceException {
-		if(amount < 0) {
+		if(amount <= 0) {
 			throw new InvalidAmountException("Negative withdrawal amount is not accepted " + amount);
 		}		
 		

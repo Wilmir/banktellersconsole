@@ -3,3 +3,6 @@
 99999987,0.02,Successfully deposited 0.02 to 99999987
 12345678,100,The account does not exist 12345678
 99999987,-100.3,Invalid amount: -100.30
+99999987,0,Invalid amount: 0.00
+99999987,-0.01,Invalid amount: -0.01
+99999987,-0.02,Invalid amount: -0.02

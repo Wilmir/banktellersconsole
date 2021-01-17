@@ -23,7 +23,7 @@ public class CreditServiceImpl extends TransactionService implements CreditServi
 	
 	@Override
 	public void execute(final int accountNumber, final double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException {
-		if(amount < 0) {
+		if(amount <= 0) {
 			throw new InvalidAmountException("Negative withdrawal amount is not accepted " + amount);
 		}		
 		

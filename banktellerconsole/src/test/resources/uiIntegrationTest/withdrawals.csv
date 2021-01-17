@@ -9,4 +9,7 @@ accountNumber,amount,expectedOutput,AccountType,CurrentBalance,WithrawalAmountDu
 99999995,50.01,The account 99999995 does not have enough balance,Current,50,0
 99999995,50.02,The account 99999995 does not have enough balance,Current,50,0
 99999999,-100.3,Invalid amount: -100.30,Current,N/A,N/A
+99999999,0,Invalid amount: 0.00,Current,N/A,N/A
+99999999,-0.01,Invalid amount: -0.01,Current,N/A,N/A
+99999999,-0.02,Invalid amount: -0.02,Current,N/A,N/A
 12345678,100,The account does not exist 12345678,Current,N/A,N/A

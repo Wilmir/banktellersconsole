@@ -53,7 +53,7 @@ class AccounDAOIntegrationTest {
 		customerDAO = new CustomerDAOImpl(database); 
 	}
 	
-	private static Stream<Arguments> accountTypes(){ // NOPMD by wilmirnicanor on 16/01/2021, 20:28
+	private static Stream<Arguments> accountTypes(){ 
 		return Stream.of(
 				Arguments.of(CURRENT_ACCOUNT_INPUT , AccountType.CURRENT, 1),
 				Arguments.of(SAVINGS_ACCOUNT_INPUT, AccountType.SAVINGS, 1)

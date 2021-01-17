@@ -9,7 +9,7 @@ import com.bankteller.facade.BankSystemManagerImpl;
 import com.bankteller.services.ServiceFactoryImpl;
 import com.bankteller.ui.ConsoleUI;
 
-public class BankTellerApp {
+public class Main {
     private static Scanner scanner = null;
 	private final static Database database = new MySQLDatabaseImpl();
 
