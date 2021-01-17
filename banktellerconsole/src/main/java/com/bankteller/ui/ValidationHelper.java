@@ -10,7 +10,7 @@ public class ValidationHelper
         System.out.print(prompt);
         final String string = scanner.next();        // read the first string on the line
         scanner.nextLine();               // discard any other data entered on the line
-        return string;
+        return string.trim();
     }
 
     public static String getLine(final Scanner scanner, final String prompt)

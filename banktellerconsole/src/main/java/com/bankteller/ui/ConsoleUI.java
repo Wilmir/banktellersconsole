@@ -50,6 +50,19 @@ public class ConsoleUI {
 			
 	}
 	
+	private void displayMainMenu()
+    {
+        System.out.println("COMMAND MENU");
+        System.out.println("create 		- Register A Customer");
+        System.out.println("search    	- Search Customers By Name");
+        System.out.println("viewcustomer    - View A Customer");
+        System.out.println("openaccount    	- Open An Account");
+        System.out.println("viewaccount     - View An Account");
+        System.out.println("withdraw    	- Log Withdrawals");
+        System.out.println("deposit    	- Log Deposit");
+        System.out.println("transfer    	- Log Money Transfer");
+        System.out.println("exit	    	- Exit this application\n");
+    }
 	
 	public String executeMenuItem(final String action, final Scanner scanner) {
 		if(action.equalsIgnoreCase("create")) {
@@ -79,26 +92,10 @@ public class ConsoleUI {
 	}
 
 	
-	private boolean matchesMenuItem(final String action) {
+	public boolean matchesMenuItem(final String action) {
 		final List<String> menuItems = Arrays.asList(new String[]{"create","search", "viewcustomer", "openaccount", "viewaccount", "withdraw", "deposit", "transfer"});		
-		return menuItems.contains(action.toLowerCase());	
+		return menuItems.contains(action.toLowerCase().trim());	
 	}
-	
-	
-	private void displayMainMenu()
-    {
-        System.out.println("COMMAND MENU");
-        System.out.println("create 		- Register A Customer");
-        System.out.println("search    	- Search Customers By Name");
-        System.out.println("viewcustomer    - View A Customer");
-        System.out.println("openaccount    	- Open An Account");
-        System.out.println("viewaccount     - View An Account");
-        System.out.println("withdraw    	- Log Withdrawals");
-        System.out.println("deposit    	- Log Deposit");
-        System.out.println("transfer    	- Log Money Transfer");
-        System.out.println("exit	    	- Exit this application\n");
-    }
-	
 	
 	
 	public String addCustomer(final Scanner scanner) {
