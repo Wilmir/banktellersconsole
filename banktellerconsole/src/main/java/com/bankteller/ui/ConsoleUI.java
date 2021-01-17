@@ -42,7 +42,6 @@ public class ConsoleUI {
 				
 			}else {
 				System.out.println("\n\n\n\nError! Not a valid command.\n");
-				
 			}
 				
 			displayMainMenu();
@@ -145,6 +144,7 @@ public class ConsoleUI {
 		}
 	}
 	
+	
 	public String getCustomerByID(final Scanner scanner) {
 		final int customerID = ValidationHelper.getInt(scanner, "Enter the customer ID: ");
 		
@@ -174,7 +174,6 @@ public class ConsoleUI {
 		}
 		
 	}
-	
 	
 	
 	public String openAccount(final Scanner scanner) {

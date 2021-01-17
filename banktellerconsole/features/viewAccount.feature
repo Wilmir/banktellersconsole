@@ -1,4 +1,4 @@
-Feature: Add A Customer
+Feature: View Account
 	As a bank teller, 
   I need to view the balance and recent transactions of an account	
   So, I can verify if debit transactions can be made  

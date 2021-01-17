@@ -1,4 +1,4 @@
-package com.bankteller.integrationtests;
+package com.bankteller.systemtest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +27,7 @@ import com.bankteller.ui.ConsoleUI;
  * The test database needs to be re-run before running this test
  */
 @TestMethodOrder(OrderAnnotation.class)
-class UserInterfaceIntegrationTest {
+class UserInterfaceSystemTest {
 	private BankSystemManager bankSystemManager;
 	private final static Database database = new UIIntegrationDatabaseImpl();
 	private ConsoleUI bankUI;

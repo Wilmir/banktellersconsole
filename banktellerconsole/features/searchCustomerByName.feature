@@ -1,8 +1,7 @@
-Feature: As a teller,
-
-I need to find a customer by name
-
-So, I can quickly check if the customer is registered in the system
+Feature: Search Customers By Name
+	As a teller,
+	I need to find a customer by name
+	So, I can quickly check if the customer is registered in the system
 
   Scenario: Successful Match of Existing Customers
     Given The teller is asked for the firstName and lastName of the customer
