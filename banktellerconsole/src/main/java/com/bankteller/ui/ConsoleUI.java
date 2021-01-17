@@ -64,6 +64,7 @@ public class ConsoleUI {
         System.out.println("exit	    	- Exit this application\n");
     }
 	
+	
 	public String executeMenuItem(final String action, final Scanner scanner) {
 		if(action.equalsIgnoreCase("create")) {
 			return addCustomer(scanner);
@@ -231,8 +232,6 @@ public class ConsoleUI {
 	}
 	
 	
-	
-	
 	public String withdraw(final Scanner scanner) {
 		final int accountNumber = ValidationHelper.getAccountNumber(scanner, "Enter the 8 digit Account number: ");
 		final double amount = ValidationHelper.getDouble(scanner, "Enter the amount to withdraw: ");
@@ -254,7 +253,6 @@ public class ConsoleUI {
 		return credit(accountNumber, amount, formattedAmount);
 	}
 
-	
 	
 	public String transferMoney(final Scanner scanner) {
 		final int sendersAccountNumber = ValidationHelper.getAccountNumber(scanner, "Enter the sender's 8 digit account number: ");

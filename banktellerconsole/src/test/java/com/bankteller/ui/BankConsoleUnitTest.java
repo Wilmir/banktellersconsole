@@ -1,8 +1,16 @@
 package com.bankteller.ui;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +18,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.bankteller.entities.Account;
+import com.bankteller.entities.SavingsAccount;
 import com.bankteller.exceptions.AccountNotFoundException;
 import com.bankteller.exceptions.CustomerAlreadyExistsException;
 import com.bankteller.exceptions.CustomerDoesNotExistException;
@@ -59,7 +69,6 @@ class BankConsoleUnitTest {
 	}
 
 	
-
 	@ParameterizedTest
 	@CsvSource({"openaccount,1234567,savings", "openaccount,7777777,current"})
 	void testUnsuccessfulAdditionOfAccountDuetoDataAccessException(final String action, final String ppsNumber, final String accountType) throws DataAccessException, CustomerDoesNotExistException {
@@ -161,8 +170,34 @@ class BankConsoleUnitTest {
 		} finally {
 			scanner.close();
 		}
-
 	}
+	
+	
+	@ParameterizedTest
+	@CsvSource({"viewaccount, 12345678, 300.15"})
+	void SuccessfulViewAccountDuetoDataAccessException(final String action, final int accountNumber, final double amount) throws DataAccessException, InvalidAmountException, AccountNotFoundException{
+		final String input = accountNumber + "\n";
+		final Scanner scanner = new Scanner(input);		
+		
+		try {
+			final Account account = new SavingsAccount();
+			account.setAccountNumber(accountNumber);
+			account.deposit(amount);
+			
+			final String expectedResult = "SAVINGS ACCOUNT # : " +accountNumber+"		BALANCE: " + amount + "\n" + 
+					"\n" + 
+					"Date \t\t\tDebit\t\tCredit\t\tBalance\n" + 
+					LocalDate.now() +"\t\t\t\t" + amount +"\t\t" + amount;			
+			
+			when(bankSystemManager.getAccount(accountNumber)).thenReturn(account);
+			assertEquals(expectedResult, bankUI.executeMenuItem(action, scanner));
+			verify(bankSystemManager, times(1)).getAccount(accountNumber);
+			verifyNoMoreInteractions(bankSystemManager);
+		} finally {
+			scanner.close();
+		}
+	}
+	
 	
 	@ParameterizedTest
 	@CsvSource({"viewcustomer, 98765432"})
