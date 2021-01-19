@@ -16,6 +16,9 @@ Feature: Withdraw Amount from Savings Account
       | accountNumber  | balance  | withdrawalamount | 
       | 99999990       | 20000.50 | 20000.50         |
       | 99999989       | 20000.50 | 20000.49         |
+      | 99999990       | 20000.50 |     0.01         |
+      | 99999990       | 20000.50 |     0.02         |
+      
 
 
   Scenario: Unsuccessful Withdrawal Due to Not Enough Balance
@@ -33,7 +36,7 @@ Feature: Withdraw Amount from Savings Account
       | 99999990       | 50.00    | 100              |
       
       
-  Scenario: Unsuccessful Withdrawal of Negative or Literal Amount
+  Scenario: Unsuccessful Withdrawal of Negative or Zero Amount
     Given The teller is asked an account number and amount to deposit
     And The number <accountnumber> is associated with an account
     When The teller enters the account number <accountnumber>
@@ -44,7 +47,9 @@ Feature: Withdraw Amount from Savings Account
     Examples: 
       | accountNumber  | amount | 
       | 99999990       | -100.3 | 
-      | 99999990       | 1M     | 
+      | 99999990       |   0.00 | 
+      | 99999990       |  -0.01 | 
+      | 99999990       |  -0.02 | 
       
       
     

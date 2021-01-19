@@ -25,5 +25,5 @@ Feature: Search Customers By Name
 
     Examples: 
       | searchFirstName  | searchLastName | message              | 
-      |     WiLmIR       |     nIcANoR    | No customer found    |
+      |     Astrid       |     James      | No customer found    |
 								

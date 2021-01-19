@@ -48,7 +48,7 @@ class BankSystemManagerImplTest {
 	private final ServiceAbstractFactory serviceFactory = mock(ServiceAbstractFactory.class);
 	private BankSystemManager bankSystemManager;
 
-	
+
 	@BeforeEach
 	void setUp() {
 		when(serviceFactory.getCustomerRegistryService()).thenReturn(customerRegistryService);
@@ -58,56 +58,56 @@ class BankSystemManagerImplTest {
 
 		bankSystemManager = new BankSystemManagerImpl(serviceFactory);
 	}
-	
-	
+
+
 	@Test
 	void testSuccessfulCustomerCreation() throws DataAccessException, CustomerAlreadyExistsException {
 		bankSystemManager.addCustomer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
-		
+
 		verify(customerRegistryService, times(1)).add(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
 	}
-	
-	
+
+
 	@Test
 	void testGetCustomersByName() throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		final List<Customer> customers = new ArrayList<>();
 		customers.add(CUSTOMER1);
-		
+
 		when(customerRegistryService.getCustomers(FIRST_NAME, LAST_NAME)).thenReturn(customers);
-		
+
 		assertEquals(customers, bankSystemManager.getCustomers(FIRST_NAME, LAST_NAME));
-		
+
 		verify(customerRegistryService, times(1)).getCustomers(FIRST_NAME, LAST_NAME);
 	}
-	
+
 	@Test
 	void testGetCustomerByID() throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		when(customerRegistryService.getCustomer(CUSTOMERID)).thenReturn(CUSTOMER1);
-		
+
 		assertEquals(CUSTOMER1, bankSystemManager.getCustomer(CUSTOMERID));
-		
+
 		verify(customerRegistryService, times(1)).getCustomer(CUSTOMERID);
 	}
-	
+
 	@ParameterizedTest
 	@ValueSource(strings = {CREDIT_ACCOUNT_TYPE, SAVINGS_ACOUNT_TYPE})
 	void testSuccessfulAccountCreation(final String accountType) throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException {
 		bankSystemManager.addAccount(PPS_NUMBER, accountType);
-		
+
 		verify(accountRegistryService, times(1)).add(PPS_NUMBER,accountType);
 	}
-	
+
 	@Test
 	void testSuccessfulDeposit() throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		bankSystemManager.credit(ACCOUNT_NUMBER, DEPOSIT_AMOUNT);
-		
+
 		verify(creditService, times(1)).credit(ACCOUNT_NUMBER, DEPOSIT_AMOUNT);
 	}
-	
+
 	@Test
 	void testSuccessfulWithdrawal() throws DataAccessException, CustomerAlreadyExistsException, CustomerDoesNotExistException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
 		bankSystemManager.debit(ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT);
-		
+
 		verify(debitService, times(1)).debit(ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT);
 	}
 

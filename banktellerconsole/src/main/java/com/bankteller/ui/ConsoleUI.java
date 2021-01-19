@@ -35,13 +35,13 @@ public class ConsoleUI {
 			System.out.println();
 
 			if(matchesMenuItem(action)) {
-				System.out.println("\n\n\n\n" + executeMenuItem(action, scanner) + "\n");
+				System.out.println("\n\n\n\n\n\n" + executeMenuItem(action, scanner) + "\n");
 				
 			}else if(action.equalsIgnoreCase("exit")) {
-				System.out.println("\n\n\n\nThank you and Good bye!\n");
+				System.out.println("\n\n\n\n\n\nThank you and Good bye!\n");
 				
 			}else {
-				System.out.println("\n\n\n\nError! Not a valid command.\n");
+				System.out.println("\n\n\n\n\n\nError! Not a valid command.\n");
 			}
 				
 			displayMainMenu();

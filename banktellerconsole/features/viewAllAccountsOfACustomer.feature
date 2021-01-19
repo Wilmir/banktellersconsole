@@ -12,7 +12,8 @@ Feature: View All Customer's Accounts
   
   Examples: 
       | customerID    | customerDetails																																								 |
-      | 8888888       | Wilmir Nicanor CustomerID: 8888888 \n AccountNumber: 99999985 SavingsAccount Balance: 35.00    |
+      | 8888888       | Wilmir Nicanor CustomerID: 8888888 \n SAVINGS ACCOUNT  : 99999984		BALANCE: 67676.50 |         |
+                      | Wilmir Nicanor CustomerID: 8888888 \n SAVINGS ACCOUNT  : 99999985		BALANCE: 35.00    |
    
   
  	Scenario: No Customer Detail is Displayed
@@ -23,7 +24,7 @@ Feature: View All Customer's Accounts
   
   Examples: 
       | customerID    | message 																		 |
-      | 88888888      | No customer associated with 88888888 found.  |
+      | 65742782      | No customer associated with 65742782 found.  |
       | __34f         | Invalid customer ID                          |
       | __34f         | Invalid customer ID                          |
       

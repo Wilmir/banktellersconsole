@@ -29,69 +29,69 @@ public class DebitServiceImplTest {
 	private final TransactionDAO transactionDAO = mock(TransactionDAO.class);
 	private final DAOAbstractFactory daoFactory = mock(DAOAbstractFactory.class);
 	private DebitService debitService;
-	
-	
+
+
 	@BeforeEach
 	void setUp() {
 		when(daoFactory.getTransactionDAO()).thenReturn(transactionDAO);
 		debitService = new DebitServiceImpl(daoFactory, accountRegistryService);
 	}
-	
-	
-	
+
+
+
 	@Test
 	void testSuccessfulTransaction() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException, WithrawalLimitExceededException, NotEnoughBalanceException {		
 		final Account account = new CurrentAccount();
 		account.setAccountNumber(ACCOUNT_NUMBER);
 		account.setBalance(INITIAL_BALANCE);
-		
+
 		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenReturn(account);		
-		
+
 		debitService.debit(ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT);
-		
+
 		assertEquals(INITIAL_BALANCE - WITHDRAWAL_AMOUNT, account.getBalance());
 		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(accountRegistryService, times(1)).update(account);
 		verify(transactionDAO, times(1)).add(isA(Transaction.class), isA(Account.class));
 	}
-	
-	
+
+
 	@Test
 	void testNegativeTransactionAmount() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {
 		final Throwable exception = assertThrows(InvalidAmountException.class, () -> debitService.debit(ACCOUNT_NUMBER, NEGATIVE_AMOUNT));
-		
+
 		assertEquals("Negative withdrawal amount is not accepted " + NEGATIVE_AMOUNT, exception.getMessage());
 		verify(accountRegistryService, never()).getAccount(anyInt());
 		verify(accountRegistryService, never()).update(anyObject());
 		verify(transactionDAO, never()).add(anyObject(), anyObject());
 
 	}
-	
-	
+
+
 	@Test
 	void testUnsuccessfulTransactionDueToSQLError() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {		
 		final Account account = new CurrentAccount();
 		account.setAccountNumber(ACCOUNT_NUMBER);
 		account.setBalance(INITIAL_BALANCE);
-		
+
 		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenReturn(account);		
 		when(transactionDAO.add(anyObject(), anyObject())).thenThrow(SQLException.class);
-		
+
 		final Throwable exception = assertThrows(DataAccessException.class, () -> debitService.debit(ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT));
-		
+
 		assertEquals("The database failed to process the request.", exception.getMessage());
 		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(accountRegistryService, times(1)).update(account);
 		verify(transactionDAO, times(1)).add(isA(Transaction.class), isA(Account.class));
 	}
-	
-	
+
+
 	@Test
 	void testUnsuccessfulTransactionDueToInexistentAccount() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {						
 		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenThrow(AccountNotFoundException.class);	
 
 		final Throwable exception = assertThrows(AccountNotFoundException.class, () -> debitService.debit(ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT));
-		
+
 		assertEquals(String.valueOf(ACCOUNT_NUMBER), exception.getMessage());
 		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(accountRegistryService, times(0)).update(anyObject());

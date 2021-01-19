@@ -18,7 +18,7 @@ Feature: Deposit Amount
       
 
 
-  Scenario: Unsuccesufl Deposit for Inexistent Account
+  Scenario: Unsuccesful Deposit for Inexistent Account
     Given The teller is asked an account number and amount to deposit
     And The number <accountnumber> is not associated with an account in the system
     When The teller enters the account number <accountnumber>
@@ -31,7 +31,7 @@ Feature: Deposit Amount
       | 12345678       | 100.3  | 
       
       
-  Scenario: Unsuccessful Deposit of Negative or Literal Amount
+  Scenario: Unsuccessful Deposit of Negative or Zero Amount
     Given The teller is asked an account number and amount to deposit
     And The number <accountnumber> is associated with an account
     When The teller enters the account number <accountnumber>
@@ -42,7 +42,9 @@ Feature: Deposit Amount
     Examples: 
       | accountNumber  | amount | 
       | 99999990       | -100.3 | 
-      | 99999990       | 1M     | 
+      | 99999990       |   0.00 | 
+      | 99999990       |  -0.01 | 
+      | 99999990       |  -0.02 | 
       
       
     

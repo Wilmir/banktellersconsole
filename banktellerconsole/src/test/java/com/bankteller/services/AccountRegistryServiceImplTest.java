@@ -50,7 +50,7 @@ class AccountRegistryServiceImplTest {
 	private final DAOAbstractFactory daoFactory = mock(DAOAbstractFactory.class);
 	private final AccountFactory accountFactory = new AccountFactory();
 	private AccountRegistryService accountRegistryService;
-	
+
 	@BeforeEach
 	void setUp() {
 		when(daoFactory.getAccountDAO()).thenReturn(accountDAO);
@@ -58,52 +58,52 @@ class AccountRegistryServiceImplTest {
 		when(daoFactory.getTransactionDAO()).thenReturn(transactionDAO);
 		accountRegistryService = new AccountRegistryServiceImpl(daoFactory, accountFactory);
 	}
-	
-	
+
+
 	@Test
 	void testSuccessfulCreationOfSavingsAccount() throws SQLException, DataAccessException, CustomerDoesNotExistException {
 		when(customerDAO.getCustomerByPPSNumber(PPS_NUMBER)).thenReturn(CUSTOMER1);
-		
+
 		accountRegistryService.add(PPS_NUMBER, SAVINGS_ACOUNT_TYPE);
-		
+
 		verify(customerDAO, times(1)).getCustomerByPPSNumber(PPS_NUMBER);
 		verify(accountDAO, times(1)).add(isA(Customer.class), isA(SavingsAccount.class));
-		
+
 	}
-	
+
 	@Test
 	void testUnSuccessfulCreationDueToSQLError() throws SQLException, DataAccessException, CustomerDoesNotExistException {		
 		when(customerDAO.getCustomerByPPSNumber(PPS_NUMBER)).thenThrow(SQLException.class);
-		
+
 		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.add(PPS_NUMBER, SAVINGS_ACOUNT_TYPE));
-		
+
 		assertEquals("The database failed to process the request.", exception.getMessage());
-				
+
 		verify(customerDAO, times(1)).getCustomerByPPSNumber(PPS_NUMBER);
 		verify(accountDAO, times(0)).add(isA(Customer.class), isA(SavingsAccount.class));
 	}
-	
+
 	@Test
 	void testUnSuccessfulCreationDueToInexistentCustomer() throws SQLException, DataAccessException, CustomerDoesNotExistException {		
-		
+
 		final Throwable exception = assertThrows(CustomerDoesNotExistException.class, () -> accountRegistryService.add(PPS_NUMBER, SAVINGS_ACOUNT_TYPE));
-		
+
 		assertEquals("The customer does not exist", exception.getMessage());
-				
+
 		verify(customerDAO, times(1)).getCustomerByPPSNumber(PPS_NUMBER);
 		verify(accountDAO, times(0)).add(isA(Customer.class), isA(SavingsAccount.class));
 	}
-	
-	
+
+
 	@Test
 	void testSuccessfulRetrievalOfAnAccount() throws DataAccessException, SQLException, AccountNotFoundException {
 		final Account account1 = new CurrentAccount();
 		account1.setAccountNumber(ACCOUNT_NUMBER);
 
 		when(accountDAO.getAccount(ACCOUNT_NUMBER)).thenReturn(account1);
-		
+
 		final Account retrievedAccount  =  accountRegistryService.getAccount(ACCOUNT_NUMBER);
-		
+
 		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(transactionDAO, times(1)).getTransactions(account1);
 		assertEquals(ACCOUNT_NUMBER, retrievedAccount.getAccountNumber());
@@ -111,71 +111,71 @@ class AccountRegistryServiceImplTest {
 		assertEquals(ZERO_BALANCE, retrievedAccount.getBalance());
 		assertTrue(retrievedAccount.getTransactions().isEmpty());
 	}
-	
-	
+
+
 	@Test
 	void testSuccessfulRetrievalOfAnAccountWithSingleTransaction() throws DataAccessException, SQLException, AccountNotFoundException {
 		final Account account1 = new CurrentAccount();
 		account1.setAccountNumber(ACCOUNT_NUMBER);		
-		
+
 		final Transaction transaction = new Transaction(true, DEPOSIT_AMOUNT, account1.getBalance() + DEPOSIT_AMOUNT);
 		transaction.setDateCreated(LocalDateTime.now());
 		final List<Transaction> transactions = new ArrayList<>();
 		transactions.add(transaction);
-		
+
 		when(accountDAO.getAccount(ACCOUNT_NUMBER)).thenReturn(account1);
 		when(transactionDAO.getTransactions(account1)).thenReturn(transactions);
-		
-		
+
+
 		final Account retrievedAccount  =  accountRegistryService.getAccount(ACCOUNT_NUMBER);
-		
+
 		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(transactionDAO, times(1)).getTransactions(account1);
-		
+
 		assertEquals(1, retrievedAccount.getTransactions().size());
 	}
-	
-	
+
+
 	@Test
 	void testSuccessfulRetrievalOfAnAccountWithMultipleTransactions() throws DataAccessException, SQLException, AccountNotFoundException {
 		final Account account1 = new CurrentAccount();
 		account1.setAccountNumber(ACCOUNT_NUMBER);		
-		
+
 		final Transaction transaction1 = new Transaction(true, DEPOSIT_AMOUNT, account1.getBalance() + DEPOSIT_AMOUNT);
 		transaction1.setDateCreated(LocalDateTime.of(2020, 12, 20, 12, 15));
-		
+
 		final Transaction transaction2 = new Transaction(false, DEPOSIT_AMOUNT, account1.getBalance() + DEPOSIT_AMOUNT);
 		transaction2.setDateCreated(LocalDateTime.of(2021, 1, 19, 3, 28));
-		
+
 		final List<Transaction> transactions = new ArrayList<>();
 		transactions.add(transaction1);
 		transactions.add(transaction2);
 
 		when(accountDAO.getAccount(ACCOUNT_NUMBER)).thenReturn(account1);
 		when(transactionDAO.getTransactions(account1)).thenReturn(transactions);
-				
+
 		final Account retrievedAccount  =  accountRegistryService.getAccount(ACCOUNT_NUMBER);
-		
+
 		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
 		verify(transactionDAO, times(1)).getTransactions(account1);
-		
+
 		assertEquals(2, retrievedAccount.getTransactions().size());
 		assertEquals(LocalDateTime.of(2021, 1, 19, 3, 28), retrievedAccount.getTransactions().get(0).getDateCreated());
 		assertEquals(LocalDateTime.of(2020, 12, 20, 12, 15), retrievedAccount.getTransactions().get(1).getDateCreated());
 	}
-	
-	
+
+
 	@Test
 	void testUnSuccessfulRetrievalOfAnAccountDueToSQLException() throws DataAccessException, SQLException {				
 		doThrow(SQLException.class).when(accountDAO).getAccount(anyInt());
 
 		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.getAccount(ACCOUNT_NUMBER));
-		
+
 		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
 		assertEquals("The database failed to process the request.", exception.getMessage());
 	}
-	
-	
+
+
 	@Test
 	void testRetrievalOfAnInexistentAccount() throws DataAccessException, SQLException, AccountNotFoundException {		
 		final Throwable exception = assertThrows(AccountNotFoundException.class, () -> accountRegistryService.getAccount(ACCOUNT_NUMBER));
@@ -184,32 +184,32 @@ class AccountRegistryServiceImplTest {
 		assertEquals("No account with account number " +  ACCOUNT_NUMBER + " found.", exception.getMessage());
 
 	}
-	
+
 	@Test
 	void testSuccessfulUpdateOfAnAccount() throws DataAccessException, SQLException, AccountNotFoundException {
 		final Account account = new CurrentAccount();
-		
+
 		accountRegistryService.update(account);
-		
+
 		verify(accountDAO, times(1)).updateBalance(account);
 	}
-	
-	
+
+
 	@Test
 	void testSuccessfulUpdateOfAnAccountDueToSQLException() throws DataAccessException, SQLException, AccountNotFoundException {		
 		final Account account = new CurrentAccount();
 
-		
+
 		doThrow(SQLException.class).when(accountDAO).updateBalance(anyObject());
-		
+
 		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.update(account));
-		
+
 		assertEquals("The database failed to process the request.", exception.getMessage());
-		
+
 		verify(accountDAO, times(1)).updateBalance(account);
 	}
-	
-	
+
+
 
 
 }

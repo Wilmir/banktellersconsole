@@ -36,35 +36,35 @@ class TransactionDAOIntegrationTest {
 	private AccountDAO accountDAO;
 	private CustomerDAO customerDAO;
 	private TransactionDAO transactionDAO;
-	
+
 	@BeforeAll
 	static void connectToDB() throws ClassNotFoundException, SQLException {
 		database.connect();
 	}
-	
+
 	@BeforeEach
 	void setUp() throws SQLException {
 		accountDAO = new AccountDAOImpl(database);
 		customerDAO = new CustomerDAOImpl(database); 
 		transactionDAO = new TransactionDAOImpl(database);
 	}
-	
-	
+
+
 	@Test
 	void testDepositTransaction() throws SQLException {
 		customerDAO.deleteAll();
 		accountDAO.deleteAll();
 		transactionDAO.deleteAll();
-		
+
 		final Customer newCustomer = customerDAO.add(NEW_CUSTOMER);
 		Account newAccount = accountDAO.add(newCustomer, NEW_ACCOUNT);
 		final double postTransactionBalance = newAccount.getBalance() + DEPOSIT_AMOUNT;
 		newAccount.setBalance(postTransactionBalance);
 		accountDAO.updateBalance(newAccount);
-		
+
 		final Transaction transaction = new Transaction(false,DEPOSIT_AMOUNT,postTransactionBalance);
 		final Transaction newTransaction = transactionDAO.add(transaction, newAccount);
-		
+
 		newAccount = accountDAO.getAccount(newAccount.getAccountNumber());
 
 		assertEquals(DEPOSIT_AMOUNT, newTransaction.getAmount());
@@ -73,35 +73,35 @@ class TransactionDAOIntegrationTest {
 		assertEquals(postTransactionBalance, newAccount.getBalance());
 		assertEquals(1, transactionDAO.getTransactions(newAccount).size());
 	}
-	
+
 	@Test
 	void testWithdrawalTransaction() throws SQLException {
 		customerDAO.deleteAll();
 		accountDAO.deleteAll();
 		transactionDAO.deleteAll();
-		
+
 		// Deposit
 		final Customer newCustomer = customerDAO.add(NEW_CUSTOMER);
 		Account newAccount = accountDAO.add(newCustomer, NEW_ACCOUNT);		
 		double postTransactionBalance = newAccount.getBalance() + DEPOSIT_AMOUNT;
 		newAccount.setBalance(postTransactionBalance);
 		accountDAO.updateBalance(newAccount);
-		
+
 		Transaction transaction = new Transaction(false,DEPOSIT_AMOUNT,postTransactionBalance);
 		transactionDAO.add(transaction, newAccount);
 
-		
+
 		// Withdrawal
 		newAccount = accountDAO.getAccount(newAccount.getAccountNumber());
 		postTransactionBalance = newAccount.getBalance() - WITHDRAWAL_AMOUNT;
 		newAccount.setBalance(postTransactionBalance);
 		accountDAO.updateBalance(newAccount);
-		
+
 		transaction = new Transaction(true,WITHDRAWAL_AMOUNT,postTransactionBalance);
 		final Transaction latestTransaction = transactionDAO.add(transaction, newAccount);
-		
+
 		newAccount = accountDAO.getAccount(newAccount.getAccountNumber());
-		
+
 		assertEquals(WITHDRAWAL_AMOUNT, latestTransaction.getAmount());
 		assertTrue(latestTransaction.isDebit());
 		assertEquals(postTransactionBalance, latestTransaction.getPostTransactionBalance());

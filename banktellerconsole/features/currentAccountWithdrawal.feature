@@ -18,6 +18,8 @@ Feature: Withdraw Amount from Current Acount
       | accountNumber  | balance  | currentdaywithdrawalamount | dailywithdrawallimit | withdrawalamount | 
       | 99999999       | 20000.50 | 9980                       | 10000.00             | 19.99            |
       | 99999998       | 20000.50 | 9980                       | 10000.00             | 20.00            |
+      | 99999999       | 20000.50 | 9980                       | 10000.00             |  0.01            |
+      | 99999999       | 20000.50 | 9980                       | 10000.00             |  0.02            |
 
 
 
@@ -53,7 +55,7 @@ Feature: Withdraw Amount from Current Acount
       | 99999995       | 50.00    | 100              |
       
       
-  Scenario: Unsuccessful Withdrawal of Negative or Literal Amount
+  Scenario: Unsuccessful Withdrawal of Negative or Zero Amount
     Given The teller is asked an account number and amount to deposit
     And The number <accountnumber> is associated with an account
     When The teller enters the account number <accountnumber>
@@ -64,7 +66,9 @@ Feature: Withdraw Amount from Current Acount
     Examples: 
       | accountNumber  | amount | 
       | 99999999       | -100.3 | 
-      | 99999999       | 1M     | 
+      | 99999999       |   0.00 | 
+      | 99999999       |  -0.01 | 
+      | 99999999       |  -0.02 | 
       
       
     

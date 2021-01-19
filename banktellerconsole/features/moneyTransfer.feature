@@ -17,11 +17,12 @@ Feature: Money Transfer
     And The message “Successfully withdrawn <transferamount> from <senderaccountnumber> ” is displayed
     And The message “Successfully deposited <transferamount> to <receiveraccountnumber>” is displayed
 
-
     Examples: 
       | senderaccountNumber | receiveraccountNumber | balance  | currentdaywithdrawalamount | dailywithdrawallimit | transferamount | 
       | 99999994            | 99999999              | 20000.00 | 9980                       | 10000.00             | 19.99          |
       | 99999993            | 99999999              | 20000.00 | 9980                       | 10000.00             | 20.00          |
+      | 99999993            | 99999999              | 20000.00 | 9980                       | 10000.00             |  0.01          |
+      | 99999993            | 99999999              | 20000.00 | 9980                       | 10000.00             |  0.02          |
 
 
 
@@ -63,7 +64,7 @@ Feature: Money Transfer
 
       
       
-  Scenario: Unsuccessful Transfer of Negative or Literal Amount
+  Scenario: Unsuccessful Transfer of Negative or Zero Amount
     Given The teller is asked an account number and amount to deposit
     And The number <accountnumber> is associated with an account
     When The teller enters the account number <accountnumber>
@@ -74,6 +75,8 @@ Feature: Money Transfer
     Examples: 
       | senderaccountNumber | receiveraccountNumber | balance  | transferamount | 
       | 99999994            | 99999999              | 50.00    | -50.00         |
-      | 99999994            | 99999999              | 50.00    | 50M            |
+      | 99999994            | 99999999              | 50.00    |   0.00         |
+      | 99999994            | 99999999              | 50.00    | - 0.01         |
+      | 99999994            | 99999999              | 50.00    | - 0.02         |
       
     

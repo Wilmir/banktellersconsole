@@ -41,45 +41,45 @@ class AccounDAOIntegrationTest {
 	private CustomerDAO customerDAO;
 	private final AccountFactory accountFactory = new AccountFactory();
 	private final static Database database = new MySQLDatabaseImpl();
-	
+
 	@BeforeAll
 	static void connectToDB() throws ClassNotFoundException, SQLException {
 		database.connect();
 	}
-	
+
 	@BeforeEach
 	void setUp() throws SQLException {
 		accountDAO = new AccountDAOImpl(database);
 		customerDAO = new CustomerDAOImpl(database); 
 	}
-	
+
 	private static Stream<Arguments> accountTypes(){ 
 		return Stream.of(
 				Arguments.of(CURRENT_ACCOUNT_INPUT , AccountType.CURRENT, 1),
 				Arguments.of(SAVINGS_ACCOUNT_INPUT, AccountType.SAVINGS, 1)
-		);
-	
+				);
+
 	}
-	
+
 	@ParameterizedTest()
 	@MethodSource("accountTypes")
 	void testAddOneAccount(final String input, final AccountType expectedType, final int expectedCount) throws SQLException{
-		
+
 		final Account account = accountFactory.getAccount(input);
 
 		customerDAO.deleteAll();
 		customerDAO.add(NEW_CUSTOMER);
 		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
-		
+
 		accountDAO.deleteAll();
 		final Account retrievedAccount = accountDAO.add(retrievedCustomer, account);
-		
+
 		assertEquals(expectedCount, accountDAO.getAccounts(retrievedCustomer).size());
 		assertEquals(expectedType, retrievedAccount.getType());
 		assertEquals(ZERO_BALANCE, retrievedAccount.getBalance());
 
 	}
-	
+
 	@Test
 	void testAddTwoAccounts() throws SQLException{
 		final Account account1 = accountFactory.getAccount(CURRENT_ACCOUNT_INPUT);
@@ -88,7 +88,7 @@ class AccounDAOIntegrationTest {
 		customerDAO.deleteAll();
 		customerDAO.add(NEW_CUSTOMER);
 		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
-		
+
 		accountDAO.deleteAll();
 		final Account retrievedAccount1 = accountDAO.add(retrievedCustomer, account1);
 		final Account retrievedAccount2 = accountDAO.add(retrievedCustomer, account2);
@@ -99,7 +99,7 @@ class AccounDAOIntegrationTest {
 		assertEquals(ZERO_BALANCE, retrievedAccount1.getBalance());
 		assertEquals(ZERO_BALANCE, retrievedAccount2.getBalance());
 	}
-	
+
 	@Test
 	void testUpdateAccountBalance() throws SQLException{
 		final Account account = accountFactory.getAccount(CURRENT_ACCOUNT_INPUT);
@@ -107,22 +107,22 @@ class AccounDAOIntegrationTest {
 		customerDAO.deleteAll();
 		customerDAO.add(NEW_CUSTOMER);
 		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
-		
+
 		accountDAO.deleteAll();
 		final Account retrievedAccount = accountDAO.add(retrievedCustomer, account);
 		assertEquals(ZERO_BALANCE, retrievedAccount.getBalance());
 
-		
+
 		retrievedAccount.setBalance(DEPOSIT_AMOUNT);		
 		accountDAO.updateBalance(retrievedAccount);
-		
+
 		final Account updatedAccount = accountDAO.getAccount(retrievedAccount.getAccountNumber());		
 		assertEquals(DEPOSIT_AMOUNT, updatedAccount.getBalance());
 
 	}
-	
 
-	
+
+
 	@AfterAll
 	static void disconnectToDB() throws SQLException {
 		database.disconnect();
