@@ -12,9 +12,11 @@ Feature: Add An Account
     And The teller is shown the message "The new  <accountType> has been added to customer with pps number: <pps>.".
   
   Examples: 
-      | pps     | accountType| accountNumber |
-      | 9999999 | current    |   10000000    |
-      | 9999999 | savings    |   10000001    |
+      | pps     | accountType|
+      | 9999999 | current    |
+      | 9999999 | savings    | 
+      | 9999999 | cuRRent    |
+      | 9999999 | SAVINGS    | 
       
       
 

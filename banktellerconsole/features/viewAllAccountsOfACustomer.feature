@@ -24,9 +24,9 @@ Feature: View All Customer's Accounts
   
   Examples: 
       | customerID    | message 																		 |
-      | 65742782      | No customer associated with 65742782 found.  |
-      | __34f         | Invalid customer ID                          |
-      | __34f         | Invalid customer ID                          |
+      | 65742782      | The customer with ID 65742782 does not exist.|
+      | __34f         | Error! Invalid integer value. Try again.     |
+      | __34f         | Error! Invalid integer value. Try again.     |
       
   
 
