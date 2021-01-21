@@ -1,0 +1,748 @@
+Found a 20 line (134 tokens) duplication in the following files: 
+Starting at line 22 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 22 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+
+	@CsvFileSource(resources = "/accountwithdrawals/current/validWithdrawalAmount.csv", numLinesToSkip = 1)
+	void testSuccessfulWithdrawal(final double balance, final double firstWithdrawalAmount, final double secondWithdrawalAmount, 
+			final double expectedRemainingBalance, final int transactionCount) throws WithrawalLimitExceededException, NotEnoughBalanceException {
+		
+		account.setBalance(balance);
+		
+		final Transaction transaction1 = account.withdraw(firstWithdrawalAmount);
+		final Transaction transaction2 = account.withdraw(secondWithdrawalAmount);
+		
+		assertEquals(transactionCount, account.getTransactions().size());
+		assertEquals(expectedRemainingBalance, account.getBalance(), 0.001);
+
+		assertEquals(firstWithdrawalAmount, transaction1.getAmount());
+		assertEquals(secondWithdrawalAmount, transaction2.getAmount());
+		assertEquals(account.getBalance(), transaction2.getPostTransactionBalance(), 0.001);
+
+	}
+	
+	@ParameterizedTest(name = "Same day withdrawals of {1}, and {2} for a current balance of {0} is invalid")
+	@CsvFileSource(resources = "/accountwithdrawals/current/invalidWithdrawalAmountZeroBalance.csv", numLinesToSkip = 1)
+=====================================================================
+Found a 16 line (116 tokens) duplication in the following files: 
+Starting at line 41 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 42 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+
+	@CsvFileSource(resources = "/accountwithdrawals/current/invalidWithdrawalAmountZeroBalance.csv", numLinesToSkip = 1)
+	void testUnSuccessfulWithdrawalDueToZeroBalance(final double balance, final double firstWithdrawalAmount, final double secondWithdrawalAmount, 
+			final double expectedRemainingBalance, final int transactionCount) throws WithrawalLimitExceededException, NotEnoughBalanceException {
+		
+		account.setBalance(balance);
+		
+		final Transaction transaction1 = account.withdraw(firstWithdrawalAmount);
+		final Throwable exception = assertThrows(NotEnoughBalanceException.class, () -> account.withdraw(secondWithdrawalAmount));
+		
+		assertEquals(transactionCount, account.getTransactions().size());
+		assertEquals(expectedRemainingBalance, account.getBalance(), 0.001);
+
+		assertEquals(firstWithdrawalAmount, transaction1.getAmount());
+		assertEquals("Account does not have enough balance", exception.getMessage());
+
+	}
+=====================================================================
+Found a 14 line (111 tokens) duplication in the following files: 
+Starting at line 76 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 80 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		final Throwable exception = assertThrows(DataAccessException.class, () -> creditService.credit(ACCOUNT_NUMBER, DEPOSIT_AMOUNT));
+		
+		assertEquals("The database failed to process the request.", exception.getMessage());
+		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
+		verify(accountRegistryService, times(1)).update(account);
+		verify(transactionDAO, times(1)).add(isA(Transaction.class), isA(Account.class));
+	}
+	
+	
+	@Test
+	void testUnsuccessfulTransactionDueToInexistentAccount() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {						
+		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenThrow(AccountNotFoundException.class);	
+
+		final Throwable exception = assertThrows(AccountNotFoundException.class, () -> creditService.credit(ACCOUNT_NUMBER, DEPOSIT_AMOUNT));
+=====================================================================
+Found a 24 line (99 tokens) duplication in the following files: 
+Starting at line 10 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/MySQLDatabaseImpl.java
+Starting at line 10 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/UIIntegrationDatabaseImpl.java
+
+	private final static String USERNAME = "root";
+	private final static String PASSWORD = "ilovemyself";
+	
+	public void connect(){
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+		} catch (ClassNotFoundException | SQLException e) {
+			System.out.println("Failed to connect to DB");
+		} 
+	}
+		
+	public void disconnect(){
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			System.out.println("Failed to disconnect to DB");
+		}
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}	
+}
+=====================================================================
+Found a 14 line (97 tokens) duplication in the following files: 
+Starting at line 58 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 61 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		final Throwable exception = assertThrows(InvalidAmountException.class, () -> creditService.credit(ACCOUNT_NUMBER, NEGATIVE_AMOUNT));
+		
+		assertEquals("Negative withdrawal amount is not accepted " + NEGATIVE_AMOUNT, exception.getMessage());
+		verify(accountRegistryService, never()).getAccount(anyInt());
+		verify(accountRegistryService, never()).update(anyObject());
+		verify(transactionDAO, never()).add(anyObject(), anyObject());
+
+	}
+	
+	
+	@Test
+	void testUnsuccessfulTransactionDueToSQLError() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {		
+		final Account account = new CurrentAccount();
+		account.setAccountNumber(ACCOUNT_NUMBER);
+=====================================================================
+Found a 10 line (90 tokens) duplication in the following files: 
+Starting at line 49 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 52 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		assertEquals(DEPOSIT_AMOUNT, account.getBalance());
+		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
+		verify(accountRegistryService, times(1)).update(account);
+		verify(transactionDAO, times(1)).add(isA(Transaction.class), isA(Account.class));
+	}
+	
+	
+	@Test
+	void testNegativeTransactionAmount() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {
+		final Throwable exception = assertThrows(InvalidAmountException.class, () -> creditService.credit(ACCOUNT_NUMBER, NEGATIVE_AMOUNT));
+=====================================================================
+Found a 27 line (88 tokens) duplication in the following files: 
+Starting at line 103 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/AccountDAOImpl.java
+Starting at line 90 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/TransactionDAOImpl.java
+
+			preparedStatement.close();		
+		}
+	}
+	
+	
+	@Override
+	public void deleteAll() throws SQLException {
+		final Statement statement = createStatement();
+		try {
+			statement.executeUpdate(DELETE_ALL_QUERY);
+		}finally {
+			statement.close();
+		}
+	}
+	
+	
+	private Statement createStatement() throws SQLException {
+		return database.getConnection().createStatement();
+	}
+	
+	
+	private PreparedStatement prepareStatement(final String query) throws SQLException {
+		return database.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+	}
+	
+	
+	private Account extractAccount(final ResultSet resultSet) throws SQLException {
+=====================================================================
+Found a 12 line (69 tokens) duplication in the following files: 
+Starting at line 124 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 152 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+
+		transactions.add(transaction);
+		
+		when(accountDAO.getAccount(ACCOUNT_NUMBER)).thenReturn(account1);
+		when(transactionDAO.getTransactions(account1)).thenReturn(transactions);
+		
+		
+		final Account retrievedAccount  =  accountRegistryService.getAccount(ACCOUNT_NUMBER);
+		
+		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
+		verify(transactionDAO, times(1)).getTransactions(account1);
+		
+		assertEquals(1, retrievedAccount.getTransactions().size());
+=====================================================================
+Found a 9 line (69 tokens) duplication in the following files: 
+Starting at line 89 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 93 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		final Throwable exception = assertThrows(AccountNotFoundException.class, () -> creditService.credit(ACCOUNT_NUMBER, DEPOSIT_AMOUNT));
+		
+		assertEquals(String.valueOf(ACCOUNT_NUMBER), exception.getMessage());
+		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
+		verify(accountRegistryService, times(0)).update(anyObject());
+		verify(transactionDAO, times(0)).add(anyObject(), anyObject());
+	}
+
+}
+=====================================================================
+Found a 18 line (67 tokens) duplication in the following files: 
+Starting at line 35 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/entities/CurrentAccount.java
+Starting at line 13 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/entities/SavingsAccount.java
+
+		if(amount > this.getBalance()) {
+			throw new NotEnoughBalanceException("Account does not have enough balance");
+		}
+	
+		final double newBalance = updateBalance(-amount);
+
+		return createTransaction(true, amount, newBalance);	
+	}
+
+	@Override
+	public Transaction deposit(final double amount) {
+		final double newBalance = updateBalance(amount);
+		
+		return createTransaction(false, amount, newBalance);
+	}
+	
+	
+}
+=====================================================================
+Found a 9 line (61 tokens) duplication in the following files: 
+Starting at line 49 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 78 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 52 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+Starting at line 82 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		assertEquals(DEPOSIT_AMOUNT, account.getBalance());
+		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
+		verify(accountRegistryService, times(1)).update(account);
+		verify(transactionDAO, times(1)).add(isA(Transaction.class), isA(Account.class));
+	}
+	
+	
+	@Test
+	void testNegativeTransactionAmount() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException {
+=====================================================================
+Found a 5 line (54 tokens) duplication in the following files: 
+Starting at line 64 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+Starting at line 79 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+
+	void testUnsuccessfulWithdrawalDuetoDataAccessException(final int accountNumber, final double amount) throws DataAccessException, InvalidAmountException, AccountNotFoundException, WithrawalLimitExceededException, NotEnoughBalanceException {
+		final String input = accountNumber + "\n" + amount + "\n";
+		final Scanner scanner = new Scanner(input);
+		try {
+			doThrow(DataAccessException.class).when(bankSystemManager).debit(accountNumber, amount);
+=====================================================================
+Found a 12 line (51 tokens) duplication in the following files: 
+Starting at line 44 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ValidationHelper.java
+Starting at line 71 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ValidationHelper.java
+
+    public static int getAccountNumber(final Scanner scanner, final String prompt)
+    {
+        boolean isValid = true;
+        int selection = 0;
+        while (isValid)
+        {
+            System.out.print(prompt);
+            if (scanner.hasNextInt())
+            {
+                selection = scanner.nextInt();
+                
+                if(selection/10000000 > 0 && selection/10000000 < 10) {
+=====================================================================
+Found a 7 line (51 tokens) duplication in the following files: 
+Starting at line 48 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 66 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 49 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+
+		final Throwable exception = assertThrows(NotEnoughBalanceException.class, () -> account.withdraw(secondWithdrawalAmount));
+		
+		assertEquals(transactionCount, account.getTransactions().size());
+		assertEquals(expectedRemainingBalance, account.getBalance(), 0.001);
+
+		assertEquals(firstWithdrawalAmount, transaction1.getAmount());
+		assertEquals("Account does not have enough balance", exception.getMessage());
+=====================================================================
+Found a 8 line (51 tokens) duplication in the following files: 
+Starting at line 80 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 91 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+
+		assertEquals("The database failed to process the request.", exception.getMessage());
+				
+		verify(customerDAO, times(1)).getCustomerByPPSNumber(PPS_NUMBER);
+		verify(accountDAO, times(0)).add(isA(Customer.class), isA(SavingsAccount.class));
+	}
+	
+	@Test
+	void testUnSuccessfulCreationDueToInexistentCustomer() throws SQLException, DataAccessException, CustomerDoesNotExistException {		
+=====================================================================
+Found a 6 line (50 tokens) duplication in the following files: 
+Starting at line 71 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 75 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		account.setAccountNumber(ACCOUNT_NUMBER);
+		
+		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenReturn(account);		
+		when(transactionDAO.add(anyObject(), anyObject())).thenThrow(SQLException.class);
+		
+		final Throwable exception = assertThrows(DataAccessException.class, () -> creditService.credit(ACCOUNT_NUMBER, DEPOSIT_AMOUNT));
+=====================================================================
+Found a 5 line (48 tokens) duplication in the following files: 
+Starting at line 17 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/facade/BankSystemManager.java
+Starting at line 11 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/services/CustomerRegistryService.java
+
+	Customer addCustomer(final String firstName, final String lastName, final String ppsNumber, final String address) throws DataAccessException, CustomerAlreadyExistsException;
+
+	List<Customer> getCustomers(final String firstName, final String lastName) throws DataAccessException;
+	
+	Customer getCustomer(final int customerID) throws DataAccessException, CustomerDoesNotExistException;
+=====================================================================
+Found a 7 line (48 tokens) duplication in the following files: 
+Starting at line 42 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 60 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 43 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+
+	void testUnSuccessfulWithdrawalDueToZeroBalance(final double balance, final double firstWithdrawalAmount, final double secondWithdrawalAmount, 
+			final double expectedRemainingBalance, final int transactionCount) throws WithrawalLimitExceededException, NotEnoughBalanceException {
+		
+		account.setBalance(balance);
+		
+		final Transaction transaction1 = account.withdraw(firstWithdrawalAmount);
+		final Throwable exception = assertThrows(NotEnoughBalanceException.class, () -> account.withdraw(secondWithdrawalAmount));
+=====================================================================
+Found a 11 line (47 tokens) duplication in the following files: 
+Starting at line 116 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/AccountDAOImpl.java
+Starting at line 150 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/CustomerDAOImpl.java
+Starting at line 103 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/TransactionDAOImpl.java
+
+	}
+	
+	
+	private Statement createStatement() throws SQLException {
+		return database.getConnection().createStatement();
+	}
+	
+	
+	private PreparedStatement prepareStatement(final String query) throws SQLException {
+		return database.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+	}
+=====================================================================
+Found a 10 line (47 tokens) duplication in the following files: 
+Starting at line 23 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ValidationHelper.java
+Starting at line 44 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ValidationHelper.java
+Starting at line 71 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ValidationHelper.java
+
+    public static int getInt(final Scanner scanner, final String prompt)
+    {
+        boolean isValid = true;
+        int selection = 0;
+        while (isValid)
+        {
+            System.out.print(prompt);
+            if (scanner.hasNextInt())
+            {
+                selection = scanner.nextInt();
+=====================================================================
+Found a 6 line (46 tokens) duplication in the following files: 
+Starting at line 39 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/facade/BankSystemManagerImplTest.java
+Starting at line 40 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+
+	private static final String ADDRESS = "Dublin, Ireland";
+	private static final String LAST_NAME = "Nicanor";
+	private static final String FIRST_NAME = "Wilmir";
+	private static final String PPS_NUMBER = "1234567";
+	private static final Customer CUSTOMER1 = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
+	private final CustomerRegistryService customerRegistryService = mock(CustomerRegistryService.class);
+=====================================================================
+Found a 6 line (46 tokens) duplication in the following files: 
+Starting at line 34 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+Starting at line 28 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/TransactionDAOIntegrationTest.java
+
+	private static final String FIRST_NAME = "Wilmir";
+	private static final String LAST_NAME = "Nicanor";
+	private static final String PPS_NUMBER = "1234567";
+	private static final String ADDRESS = "Dublin, Ireland";
+	private static final Customer NEW_CUSTOMER = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
+	private Customer retrievedCustomer;
+=====================================================================
+Found a 7 line (43 tokens) duplication in the following files: 
+Starting at line 23 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 42 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 60 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 23 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+Starting at line 43 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+
+	void testSuccessfulWithdrawal(final double balance, final double firstWithdrawalAmount, final double secondWithdrawalAmount, 
+			final double expectedRemainingBalance, final int transactionCount) throws WithrawalLimitExceededException, NotEnoughBalanceException {
+		
+		account.setBalance(balance);
+		
+		final Transaction transaction1 = account.withdraw(firstWithdrawalAmount);
+		final Transaction transaction2 = account.withdraw(secondWithdrawalAmount);
+=====================================================================
+Found a 6 line (42 tokens) duplication in the following files: 
+Starting at line 130 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/UserInterfaceIntegrationTest.java
+Starting at line 160 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/UserInterfaceIntegrationTest.java
+
+	void testWithdrawals(final int accountNumber, final double amount, final String expectedOutput) {
+		final String input = accountNumber + "\n" + amount + "\n" ;
+		final Scanner scanner = new Scanner(input);
+		
+		try {
+			assertEquals(expectedOutput, bankUI.withdraw(scanner));
+=====================================================================
+Found a 9 line (41 tokens) duplication in the following files: 
+Starting at line 45 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+Starting at line 40 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/TransactionDAOIntegrationTest.java
+
+	@BeforeAll
+	static void connectToDB() throws ClassNotFoundException, SQLException {
+		database.connect();
+	}
+	
+	@BeforeEach
+	void setUp() throws SQLException {
+		accountDAO = new AccountDAOImpl(database);
+		customerDAO = new CustomerDAOImpl(database); 
+=====================================================================
+Found a 7 line (41 tokens) duplication in the following files: 
+Starting at line 54 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/TransactionDAOIntegrationTest.java
+Starting at line 78 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/TransactionDAOIntegrationTest.java
+
+	void testDepositTransaction() throws SQLException {
+		customerDAO.deleteAll();
+		accountDAO.deleteAll();
+		transactionDAO.deleteAll();
+		
+		final Customer newCustomer = customerDAO.add(NEW_CUSTOMER);
+		Account newAccount = accountDAO.add(newCustomer, NEW_ACCOUNT);
+=====================================================================
+Found a 7 line (41 tokens) duplication in the following files: 
+Starting at line 103 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 127 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 155 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+
+		when(accountDAO.getAccount(ACCOUNT_NUMBER)).thenReturn(account1);
+		
+		final Account retrievedAccount  =  accountRegistryService.getAccount(ACCOUNT_NUMBER);
+		
+		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
+		verify(transactionDAO, times(1)).getTransactions(account1);
+		assertEquals(ACCOUNT_NUMBER, retrievedAccount.getAccountNumber());
+=====================================================================
+Found a 7 line (39 tokens) duplication in the following files: 
+Starting at line 29 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 48 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 66 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/CurrentAccountTest.java
+Starting at line 29 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+Starting at line 49 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/entities/SavingsAccountTest.java
+
+		final Transaction transaction2 = account.withdraw(secondWithdrawalAmount);
+		
+		assertEquals(transactionCount, account.getTransactions().size());
+		assertEquals(expectedRemainingBalance, account.getBalance(), 0.001);
+
+		assertEquals(firstWithdrawalAmount, transaction1.getAmount());
+		assertEquals(secondWithdrawalAmount, transaction2.getAmount());
+=====================================================================
+Found a 10 line (39 tokens) duplication in the following files: 
+Starting at line 68 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+Starting at line 105 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+
+		final Account account = accountFactory.getAccount(input);
+
+		customerDAO.deleteAll();
+		customerDAO.add(NEW_CUSTOMER);
+		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
+		
+		accountDAO.deleteAll();
+		final Account retrievedAccount = accountDAO.add(retrievedCustomer, account);
+		
+		assertEquals(expectedCount, accountDAO.getAccounts(retrievedCustomer).size());
+=====================================================================
+Found a 9 line (39 tokens) duplication in the following files: 
+Starting at line 35 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 37 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		creditService = new CreditServiceImpl(daoFactory, accountRegistryService);
+	}
+	
+	
+	
+	@Test
+	void testSuccessfulTransaction() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException, WithrawalLimitExceededException, NotEnoughBalanceException {		
+		final Account account = new CurrentAccount();
+		account.setAccountNumber(ACCOUNT_NUMBER);
+=====================================================================
+Found a 5 line (37 tokens) duplication in the following files: 
+Starting at line 132 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CustomerRegistryServiceImplTest.java
+Starting at line 145 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CustomerRegistryServiceImplTest.java
+
+		assertEquals("No customer associated with " + CUSTOMER_ID + " found.", exception.getMessage());
+		
+		verify(customerDAO, times(1)).getCustomerByID(CUSTOMER_ID);
+		verify(accountDAO, never()).getAccounts(anyObject());
+	}
+=====================================================================
+Found a 5 line (36 tokens) duplication in the following files: 
+Starting at line 25 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 27 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+	private static final double DEPOSIT_AMOUNT = 3001.14;
+	private final AccountRegistryService accountRegistryService = mock(AccountRegistryService.class);
+	private final TransactionDAO transactionDAO = mock(TransactionDAO.class);
+	private final DAOAbstractFactory daoFactory = mock(DAOAbstractFactory.class);
+	private CreditService creditService;
+=====================================================================
+Found a 6 line (35 tokens) duplication in the following files: 
+Starting at line 43 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+Starting at line 72 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+	void testSuccessfulTransaction() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException, WithrawalLimitExceededException, NotEnoughBalanceException {		
+		final Account account = new CurrentAccount();
+		account.setAccountNumber(ACCOUNT_NUMBER);
+		account.setBalance(INITIAL_BALANCE);
+		
+		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenReturn(account);		
+=====================================================================
+Found a 15 line (34 tokens) duplication in the following files: 
+Starting at line 294 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ConsoleUI.java
+Starting at line 325 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ConsoleUI.java
+
+			return "Successfully withdrawn " + formattedAmount + " from " + accountNumber;
+			
+		} catch (InvalidAmountException e) {
+
+			return "Invalid amount: " + formattedAmount;
+			
+		} catch (DataAccessException e) {
+
+			return "The bank system encountered an error.";
+		
+		} catch (AccountNotFoundException e) {
+
+			return "The account does not exist " + accountNumber;
+			
+		} catch (WithrawalLimitExceededException e) {
+=====================================================================
+Found a 5 line (32 tokens) duplication in the following files: 
+Starting at line 34 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+Starting at line 23 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/CustomerDAOIntegrationTests.java
+Starting at line 28 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/TransactionDAOIntegrationTest.java
+
+	private static final String FIRST_NAME = "Wilmir";
+	private static final String LAST_NAME = "Nicanor";
+	private static final String PPS_NUMBER = "1234567";
+	private static final String ADDRESS = "Dublin, Ireland";
+	private static final Customer NEW_CUSTOMER = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
+=====================================================================
+Found a 8 line (31 tokens) duplication in the following files: 
+Starting at line 25 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/services/CreditServiceImpl.java
+Starting at line 28 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/services/DebitServiceImpl.java
+
+	public void execute(final int accountNumber, final double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException {
+		if(amount < 0) {
+			throw new InvalidAmountException("Negative withdrawal amount is not accepted " + amount);
+		}		
+		
+		final Account account = retrieveAccount(accountNumber);		
+		
+		final Transaction transaction = account.deposit(amount);
+=====================================================================
+Found a 5 line (31 tokens) duplication in the following files: 
+Starting at line 57 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/UserInterfaceIntegrationTest.java
+Starting at line 35 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+
+	void testAdditionOfCustomer(final String firstName, final String lastName, final String ppsNumber, final String address, final String expectedOutput) {
+		final String input = firstName + "\n" + lastName + "\n" + ppsNumber + "\n" + address + "\n";
+		final Scanner scanner = new Scanner(input);
+		
+		try {
+=====================================================================
+Found a 3 line (30 tokens) duplication in the following files: 
+Starting at line 104 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ConsoleUI.java
+Starting at line 124 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ConsoleUI.java
+
+	public String addCustomer(final Scanner scanner) {
+		final String firstName = ValidationHelper.getLine(scanner, "Enter the customer's first name: ");
+		final String lastName = ValidationHelper.getLine(scanner, "Enter the customer's last name: ");
+=====================================================================
+Found a 5 line (29 tokens) duplication in the following files: 
+Starting at line 39 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/facade/BankSystemManagerImplTest.java
+Starting at line 40 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 30 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CustomerRegistryServiceImplTest.java
+
+	private static final String ADDRESS = "Dublin, Ireland";
+	private static final String LAST_NAME = "Nicanor";
+	private static final String FIRST_NAME = "Wilmir";
+	private static final String PPS_NUMBER = "1234567";
+	private static final Customer CUSTOMER1 = new Customer(FIRST_NAME, LAST_NAME, PPS_NUMBER, ADDRESS);
+=====================================================================
+Found a 4 line (29 tokens) duplication in the following files: 
+Starting at line 172 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 181 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+
+		final Throwable exception = assertThrows(DataAccessException.class, () -> accountRegistryService.getAccount(ACCOUNT_NUMBER));
+		
+		verify(accountDAO, times(1)).getAccount(ACCOUNT_NUMBER);
+		assertEquals("The database failed to process the request.", exception.getMessage());
+=====================================================================
+Found a 5 line (29 tokens) duplication in the following files: 
+Starting at line 41 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 69 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+
+	void testSuccessfulTransaction() throws DataAccessException, AccountNotFoundException, InvalidAmountException, SQLException, WithrawalLimitExceededException, NotEnoughBalanceException {		
+		final Account account = new CurrentAccount();
+		account.setAccountNumber(ACCOUNT_NUMBER);
+		
+		when(accountRegistryService.getAccount(ACCOUNT_NUMBER)).thenReturn(account);		
+=====================================================================
+Found a 11 line (29 tokens) duplication in the following files: 
+Starting at line 38 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/ValidatorTest.java
+Starting at line 59 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/ValidatorTest.java
+
+		final Scanner scanner = new Scanner("1\n");
+		try {
+			assertEquals(1, ValidationHelper.getInt(scanner, "What is your favorite number?"));
+		}finally {
+			scanner.close();
+		}
+	}
+	
+	
+	@Test
+	void testGetDouble() {
+=====================================================================
+Found a 6 line (28 tokens) duplication in the following files: 
+Starting at line 20 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/services/CreditServiceImpl.java
+Starting at line 23 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/services/DebitServiceImpl.java
+
+			throws DataAccessException, AccountNotFoundException, InvalidAmountException {
+		execute(accountNumber, amount);
+	}
+	
+	@Override
+	public void execute(final int accountNumber, final double amount) throws DataAccessException, AccountNotFoundException, InvalidAmountException {
+=====================================================================
+Found a 3 line (28 tokens) duplication in the following files: 
+Starting at line 239 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ConsoleUI.java
+Starting at line 251 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/ui/ConsoleUI.java
+
+	public String withdraw(final Scanner scanner) {
+		final int accountNumber = ValidationHelper.getAccountNumber(scanner, "Enter the 8 digit Account number: ");
+		final double amount = ValidationHelper.getDouble(scanner, "Enter the amount to withdraw: ");
+=====================================================================
+Found a 9 line (28 tokens) duplication in the following files: 
+Starting at line 43 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+Starting at line 32 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/CustomerDAOIntegrationTests.java
+
+	private final static Database database = new MySQLDatabaseImpl();
+	
+	@BeforeAll
+	static void connectToDB() throws ClassNotFoundException, SQLException {
+		database.connect();
+	}
+	
+	@BeforeEach
+	void setUp() throws SQLException {
+=====================================================================
+Found a 8 line (27 tokens) duplication in the following files: 
+Starting at line 68 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+Starting at line 86 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+Starting at line 105 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/AccounDAOIntegrationTest.java
+
+		final Account account = accountFactory.getAccount(input);
+
+		customerDAO.deleteAll();
+		customerDAO.add(NEW_CUSTOMER);
+		retrievedCustomer = customerDAO.getCustomerByPPSNumber(PPS_NUMBER);
+		
+		accountDAO.deleteAll();
+		final Account retrievedAccount = accountDAO.add(retrievedCustomer, account);
+=====================================================================
+Found a 8 line (27 tokens) duplication in the following files: 
+Starting at line 34 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/CustomerDAOIntegrationTests.java
+Starting at line 40 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/TransactionDAOIntegrationTest.java
+
+	@BeforeAll
+	static void connectToDB() throws ClassNotFoundException, SQLException {
+		database.connect();
+	}
+	
+	
+	@BeforeEach
+	void setUp() throws SQLException {
+=====================================================================
+Found a 3 line (27 tokens) duplication in the following files: 
+Starting at line 78 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 91 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 82 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+Starting at line 95 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+		assertEquals("The database failed to process the request.", exception.getMessage());
+		verify(accountRegistryService, times(1)).getAccount(ACCOUNT_NUMBER);
+		verify(accountRegistryService, times(1)).update(account);
+=====================================================================
+Found a 4 line (26 tokens) duplication in the following files: 
+Starting at line 48 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 26 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/CreditServiceImplTest.java
+Starting at line 28 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/DebitServiceImplTest.java
+
+	private final CustomerDAO customerDAO = mock(CustomerDAO.class);
+	private final TransactionDAO transactionDAO = mock(TransactionDAO.class);
+	private final DAOAbstractFactory daoFactory = mock(DAOAbstractFactory.class);
+	private final AccountFactory accountFactory = new AccountFactory();
+=====================================================================
+Found a 13 line (25 tokens) duplication in the following files: 
+Starting at line 65 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/AccountDAOImpl.java
+Starting at line 105 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/main/java/com/bankteller/dao/CustomerDAOImpl.java
+
+				accountList.add(extractAccount(resultSet));
+			}
+			return accountList;
+		} finally {
+			resultSet.close();
+			preparedStatement.close();
+			
+		}
+	}
+
+	
+	@Override
+	public Account getAccount(final int accountNumber) throws SQLException {		
+=====================================================================
+Found a 4 line (25 tokens) duplication in the following files: 
+Starting at line 56 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/CustomerDAOIntegrationTests.java
+Starting at line 81 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/integrationtests/CustomerDAOIntegrationTests.java
+
+	void testAddOneCustomer() throws SQLException{
+		customerDAO.add(CUSTOMER1);
+		
+		assertEquals(1, customerDAO.getCustomers().size());
+=====================================================================
+Found a 5 line (25 tokens) duplication in the following files: 
+Starting at line 117 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+Starting at line 140 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/services/AccountRegistryServiceImplTest.java
+
+	void testSuccessfulRetrievalOfAnAccountWithSingleTransaction() throws DataAccessException, SQLException, AccountNotFoundException {
+		final Account account1 = new CurrentAccount();
+		account1.setAccountNumber(ACCOUNT_NUMBER);		
+		
+		final Transaction transaction = new Transaction(true, DEPOSIT_AMOUNT, account1.getBalance() + DEPOSIT_AMOUNT);
+=====================================================================
+Found a 4 line (25 tokens) duplication in the following files: 
+Starting at line 65 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+Starting at line 80 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+Starting at line 95 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+Starting at line 110 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+Starting at line 125 of /Users/wilmirnicanor/git/banktellersconsole/banktellerconsole/src/test/java/com/bankteller/ui/BankConsoleUITest.java
+
+		final String input = accountNumber + "\n" + amount + "\n";
+		final Scanner scanner = new Scanner(input);
+		try {
+			doThrow(DataAccessException.class).when(bankSystemManager).debit(accountNumber, amount);
